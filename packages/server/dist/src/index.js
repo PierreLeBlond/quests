@@ -5,7 +5,6 @@ import { login } from "./login/login";
 import swagger from "@elysiajs/swagger";
 import { logout } from "./logout/logout";
 import { authenticated } from "./authenticated";
-import { session } from "./session";
 import { OAuthRequestError } from "@lucia-auth/oauth";
 
 const app = new Elysia()
@@ -21,12 +20,10 @@ const app = new Elysia()
       set.status = 400;
       return `Client error: ${error.message}`;
     }
-
     if (error instanceof OAuthRequestError) {
       set.status = 400;
       return `Client error: invalide OAuth code`;
     }
-
     set.status = 500;
     console.log(error);
     return "Internal server error :(";
@@ -39,8 +36,6 @@ const app = new Elysia()
   })
   .use(logout)
   .listen(3000);
-
-export type App = typeof app;
 
 console.log(
   `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`

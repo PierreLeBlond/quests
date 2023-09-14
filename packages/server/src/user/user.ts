@@ -1,36 +1,21 @@
-import Elysia from "elysia";
-import prisma from "../prisma";
-import { OAuthRequestError } from "@lucia-auth/oauth";
-import { login } from "./login/login";
-import { auth } from "@api/lucia";
+import Elysia, { t } from "elysia";
+import { session } from "@/session";
+import { User } from "lucia";
+import { Optional } from "@sinclair/typebox";
 
-export const user = new Elysia({ prefix: "/user" })
-  .use(login)
-  .get("/", async (context) => {
-    const authRequest = auth.handleRequest(context);
-    const session = await authRequest.validate();
-
-    if (!session) {
-      return null;
+export const user = (app: Elysia) =>
+  app.use(session).get(
+    "/user",
+    async ({ session }) => {
+      return { user: session?.user };
+    },
+    {
+      response: t.Object({
+        user: t.Optional(
+          t.Object({
+            githubUsername: t.String(),
+          })
+        ),
+      }),
     }
-
-    const user = session.user;
-    const username = user.username;
-
-    return {
-      user,
-      username,
-    };
-  })
-  .post("/logout", async (context) => {
-    const { set } = context;
-    const authRequest = auth.handleRequest(context);
-    const session = await authRequest.validate();
-    if (!session) {
-      set.status = 401;
-      return "Unauthorized";
-    }
-    await auth.invalidateSession(session.sessionId);
-    authRequest.setSession(null);
-    set.redirect = "/user/login/github";
-  });
+  );
