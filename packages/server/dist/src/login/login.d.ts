@@ -17,8 +17,8 @@ export declare const login: (app: Elysia) => Elysia<"", {
                 params: undefined;
                 response: {
                     '200': {
-                        state: string;
                         url: string;
+                        state: string;
                     };
                 };
             };

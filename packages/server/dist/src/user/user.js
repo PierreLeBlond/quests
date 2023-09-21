@@ -1,5 +1,5 @@
 import { t } from "elysia";
-import { session } from "@/session";
+import { session } from "@/src/session";
 export const user = (app) => app.use(session).get("/user", async ({ session }) => {
     return { user: session?.user };
 }, {

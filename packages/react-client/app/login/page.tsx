@@ -20,11 +20,13 @@ const LoginPage = () => {
   };
 
   return (
-    <form action={connect}>
-      <Button>
-        <Github className="h-4 w-4 mr-2"></Github>Connect with github
-      </Button>
-    </form>
+    <div className="w-full h-full flex items-center justify-center">
+      <form action={connect}>
+        <Button>
+          <Github className="h-4 w-4 mr-2"></Github>Connect with github
+        </Button>
+      </form>
+    </div>
   );
 };
 

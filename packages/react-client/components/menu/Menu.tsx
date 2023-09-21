@@ -5,7 +5,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { LogOut, MoreVertical } from "lucide-react";
+import { DoorOpen, MoreVertical } from "lucide-react";
 import { eden, fetchHeaders } from "@/lib/eden";
 import { redirect } from "next/navigation";
 import { getUser } from "@/lib/getUser";
@@ -27,7 +27,7 @@ const Menu = async () => {
         <form action={logout} className="w-full">
           <button className="flex justify-center w-full">
             Log out
-            <LogOut className="w-4 h-4 ml-2"></LogOut>
+            <DoorOpen className="w-4 h-4 ml-2"></DoorOpen>
           </button>
         </form>
       </DropdownMenuItem>
@@ -37,10 +37,10 @@ const Menu = async () => {
 
   return (
     <>
-      <nav className="fixed right-0 top-0 p-4">
+      <nav className="fixed right-0 top-0 p-4 z-10">
         <DropdownMenu>
           <DropdownMenuTrigger>
-            <MoreVertical></MoreVertical>
+            <MoreVertical className="w-6 h-6"></MoreVertical>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             {logoutItem}

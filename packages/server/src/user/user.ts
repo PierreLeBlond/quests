@@ -1,7 +1,5 @@
 import Elysia, { t } from "elysia";
-import { session } from "@/session";
-import { User } from "lucia";
-import { Optional } from "@sinclair/typebox";
+import { session } from "@/src/session";
 
 export const user = (app: Elysia) =>
   app.use(session).get(

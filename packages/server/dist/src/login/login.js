@@ -1,5 +1,5 @@
 import { t } from "elysia";
-import { auth, githubAuth } from "@/lucia";
+import { auth, githubAuth } from "@/src/lucia";
 export const login = (app) => app.group("/login", (app) => app
     .get("/github", async () => {
     const [url, state] = await githubAuth.getAuthorizationUrl();

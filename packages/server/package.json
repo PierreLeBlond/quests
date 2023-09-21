@@ -19,7 +19,9 @@
   "devDependencies": {
     "bun-types": "latest",
     "prisma": "^5.2.0",
+    "prisma-typebox-generator": "^2.1.0",
     "typescript": "^5.2.2"
   },
-  "module": "src/index.js"
+  "module": "src/index.js",
+  "type": "module"
 }

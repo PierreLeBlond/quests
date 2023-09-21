@@ -1,6 +1,5 @@
 import Elysia, { t } from "elysia";
-import { OAuthRequestError } from "@lucia-auth/oauth";
-import { auth, githubAuth } from "@/lucia";
+import { auth, githubAuth } from "@/src/lucia";
 
 export const login = (app: Elysia) =>
   app.group("/login", (app) =>

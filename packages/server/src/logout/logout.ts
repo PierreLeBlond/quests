@@ -1,6 +1,6 @@
 import Elysia from "elysia";
-import { auth } from "@/lucia";
-import { authenticated } from "@/authenticated";
+import { auth } from "@/src/lucia";
+import { authenticated } from "@/src/authenticated";
 
 export const logout = (app: Elysia) =>
   app.use(authenticated).post("/logout", async (context) => {

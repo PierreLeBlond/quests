@@ -5,8 +5,9 @@ import { login } from "./login/login";
 import swagger from "@elysiajs/swagger";
 import { logout } from "./logout/logout";
 import { authenticated } from "./authenticated";
-import { session } from "./session";
 import { OAuthRequestError } from "@lucia-auth/oauth";
+import { quest } from "./quest/quest";
+import { step } from "./step/step";
 
 const app = new Elysia()
   .use(cors())
@@ -37,8 +38,13 @@ const app = new Elysia()
   .get("/hello", async ({ session }) => {
     return { message: `Hello ${session.user.githubUsername} !` };
   })
+  .use(quest)
+  .use(step)
   .use(logout)
-  .listen(3000);
+  .listen({
+    port: 3000,
+    hostname: "192.168.1.88",
+  });
 
 export type App = typeof app;
 

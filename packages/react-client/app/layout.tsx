@@ -21,7 +21,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Menu></Menu>
-          <main className="flex items-center justify-center h-screen">
+          <main className="relative flex h-screen w-screen overflow-hidden">
             {children}
           </main>
         </ThemeProvider>
