@@ -42,6 +42,7 @@ export const login = (app: Elysia) =>
             userId: user.userId,
             attributes: {},
           });
+          // @ts-ignore
           const authRequest = auth.handleRequest(context);
           authRequest.setSession(session);
 

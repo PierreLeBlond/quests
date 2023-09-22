@@ -4,24 +4,25 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun run --watch src/index.ts",
-    "check": "tsc"
+    "check": "tsc",
+    "start:migrate:prod": "prisma migrate deploy && bun run src/index.ts"
   },
   "dependencies": {
-    "@elysiajs/cookie": "^0.6.1",
-    "@elysiajs/cors": "^0.6.0",
-    "@elysiajs/swagger": "^0.6.2",
+    "@elysiajs/cookie": "^0.7.0",
+    "@elysiajs/cors": "^0.7.0",
+    "@elysiajs/swagger": "^0.7.2",
     "@lucia-auth/adapter-prisma": "^3.0.1",
-    "@lucia-auth/oauth": "^3.1.0",
-    "@prisma/client": "5.2.0",
-    "elysia": "latest",
-    "lucia": "^2.5.0"
+    "@lucia-auth/oauth": "^3.2.0",
+    "@prisma/client": "^5.3.1",
+    "elysia": "^0.7.10",
+    "lucia": "^2.6.0"
   },
   "devDependencies": {
     "bun-types": "latest",
-    "prisma": "^5.2.0",
+    "prisma": "^5.3.1",
     "prisma-typebox-generator": "^2.1.0",
     "typescript": "^5.2.2"
   },
-  "module": "src/index.js",
+  "module": "src/index.ts",
   "type": "module"
 }

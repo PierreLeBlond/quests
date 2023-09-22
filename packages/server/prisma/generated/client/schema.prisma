@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+generator typebox {
+  provider = "prisma-typebox-generator"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model User {
+  id String @id @unique
+
+  auth_session Session[]
+  key          Key[]
+  quests       Quest[]
+
+  github_username String @unique
+}
+
+model Session {
+  id             String @id @unique
+  user_id        String
+  active_expires BigInt
+  idle_expires   BigInt
+  user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  @@index([user_id])
+}
+
+model Key {
+  id              String  @id @unique
+  hashed_password String?
+  user_id         String
+  user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  @@index([user_id])
+}
+
+model Quest {
+  id       String  @id @default(uuid())
+  name     String
+  archived Boolean @default(false)
+
+  user_id String
+  user    User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  index Int
+
+  steps Step[]
+
+  @@index([user_id])
+}
+
+model Step {
+  id          String  @id @default(uuid())
+  description String
+  done        Boolean @default(false)
+
+  quest_id String
+  quest    Quest  @relation(references: [id], fields: [quest_id], onDelete: Cascade)
+
+  @@index([quest_id])
+}

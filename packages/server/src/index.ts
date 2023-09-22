@@ -42,8 +42,8 @@ const app = new Elysia()
   .use(step)
   .use(logout)
   .listen({
+    hostname: "0.0.0.0",
     port: 3000,
-    hostname: "192.168.1.88",
   });
 
 export type App = typeof app;

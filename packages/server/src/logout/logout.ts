@@ -7,6 +7,7 @@ export const logout = (app: Elysia) =>
     const { session } = context;
     await auth.invalidateSession(session.sessionId);
 
+    // @ts-ignore
     const authRequest = auth.handleRequest(context);
     authRequest.setSession(null);
   });

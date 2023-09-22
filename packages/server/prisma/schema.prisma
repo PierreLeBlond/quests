@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "./generated/client"
 }
 
 generator typebox {
@@ -7,8 +8,9 @@ generator typebox {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model User {
@@ -51,6 +53,8 @@ model Quest {
   index Int
 
   steps Step[]
+
+  @@index([user_id])
 }
 
 model Step {
@@ -60,4 +64,6 @@ model Step {
 
   quest_id String
   quest    Quest  @relation(references: [id], fields: [quest_id], onDelete: Cascade)
+
+  @@index([quest_id])
 }
