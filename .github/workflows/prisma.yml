@@ -12,6 +12,6 @@ jobs:
         with:
           bun-version: latest
       - name: Deploy Migrations
-        run: bunx prisma db push -- --schema=./packages/server/prisma/schema.prisma --skip-generate
+        run: bunx prisma db push --schema=./packages/server/prisma/schema.prisma --skip-generate
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
