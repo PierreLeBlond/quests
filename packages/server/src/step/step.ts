@@ -1,7 +1,7 @@
 import { authenticated } from "@/src/authenticated";
 import prisma from "@/src/prisma";
 import Elysia, { t } from "elysia";
-import { Step, StepInput } from "@/prisma/typebox";
+import { Step, StepInput } from "@/prisma/generated/typebox";
 
 export const step = (app: Elysia) =>
   app

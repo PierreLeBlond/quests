@@ -1,7 +1,7 @@
 import { authenticated } from "@/src/authenticated";
 import prisma from "@/src/prisma";
 import Elysia, { t } from "elysia";
-import { Quest, QuestInput } from "@/prisma/typebox";
+import { Quest, QuestInput } from "@/prisma/generated/typebox";
 
 export const quest = (app: Elysia) =>
   app
@@ -74,7 +74,6 @@ export const quest = (app: Elysia) =>
     .post(
       "/quest/:questId",
       async ({ session, body, params: { questId } }) => {
-        console.log({ body });
         const quest = await prisma.quest.update({
           where: {
             id: questId,

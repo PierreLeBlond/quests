@@ -5,6 +5,7 @@ generator client {
 
 generator typebox {
   provider = "prisma-typebox-generator"
+  output   = "./generated/typebox"
 }
 
 datasource db {
