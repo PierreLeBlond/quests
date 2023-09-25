@@ -1,10 +1,16 @@
 "use client";
 
+import { useMounted } from "@/hooks/useMounted";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
 export const ThemeSwitch = () => {
   const { setTheme, theme } = useTheme();
+  const { mounted } = useMounted();
+
+  if (!mounted) {
+    return null;
+  }
 
   const switchTheme = () => {
     setTheme(theme === "light" ? "dark" : "light");
