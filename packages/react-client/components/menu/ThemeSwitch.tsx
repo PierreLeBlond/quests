@@ -1,10 +1,10 @@
 "use client";
 
-import { useMounted } from "@/hooks/useMounted";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useMounted } from "@/hooks/useMounted";
 
-export const ThemeSwitch = () => {
+export function ThemeSwitch() {
   const { setTheme, theme } = useTheme();
   const { mounted } = useMounted();
 
@@ -19,17 +19,22 @@ export const ThemeSwitch = () => {
   const item =
     theme === "light" ? (
       <>
-        Light <Sun className="w-4 h-4 ml-2"></Sun>
+        Light <Sun className="w-4 h-4 ml-2" />
       </>
     ) : (
       <>
-        Dark <Moon className="w-4 h-4 ml-2"></Moon>
+        Dark <Moon className="w-4 h-4 ml-2" />
       </>
     );
 
   return (
-    <div className="flex w-full justify-center" onClick={switchTheme}>
+    <button
+      type="button"
+      className="flex w-full justify-center"
+      onClick={switchTheme}
+      onKeyDown={switchTheme}
+    >
       {item}
-    </div>
+    </button>
   );
-};
+}

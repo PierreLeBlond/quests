@@ -14,7 +14,7 @@ interface QuestMenuProps {
   formState: FormState;
 }
 
-export const QuestMenu = ({ props }: { props: QuestMenuProps }) => {
+export function QuestMenu({ props }: { props: QuestMenuProps }) {
   const { editMode, setEditMode, formState } = props;
   return (
     <div className="flex justify-center">
@@ -31,7 +31,7 @@ export const QuestMenu = ({ props }: { props: QuestMenuProps }) => {
                 xmlns="http://www.w3.org/2000/svg"
                 width="40"
                 height="12"
-                stroke-width="1"
+                strokeWidth="1"
                 fill="none"
                 viewBox="0 0 40 12"
                 className="stroke-current"
@@ -42,9 +42,9 @@ export const QuestMenu = ({ props }: { props: QuestMenuProps }) => {
           </div>
           <Flame
             className={`h-4 w-4 ${
-              formState.name == "dirty" && "text-orange-500"
-            } ${formState.name == "submitting" && "text-rose-500"}`}
-          ></Flame>
+              formState.name === "dirty" && "text-orange-500"
+            } ${formState.name === "submitting" && "text-rose-500"}`}
+          />
         </button>
         <Toggle
           onPressedChange={(pressed) =>
@@ -53,7 +53,7 @@ export const QuestMenu = ({ props }: { props: QuestMenuProps }) => {
           pressed={editMode === "reorder"}
           className="col-start-1 row-start-2"
         >
-          <Grip className="h-4 w-4"></Grip>
+          <Grip className="h-4 w-4" />
         </Toggle>
         <Toggle
           onPressedChange={(pressed) =>
@@ -62,7 +62,7 @@ export const QuestMenu = ({ props }: { props: QuestMenuProps }) => {
           pressed={editMode === "edit"}
           className="col-start-3 row-start-2"
         >
-          <Settings className="h-4 w-4"></Settings>
+          <Settings className="h-4 w-4" />
         </Toggle>
         <Toggle
           onPressedChange={(pressed) =>
@@ -71,9 +71,9 @@ export const QuestMenu = ({ props }: { props: QuestMenuProps }) => {
           pressed={editMode === "delete"}
           className="col-start-2 row-start-3"
         >
-          <Swords className="h-4 w-4"></Swords>
+          <Swords className="h-4 w-4" />
         </Toggle>
       </div>
     </div>
   );
-};
+}

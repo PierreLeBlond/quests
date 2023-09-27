@@ -1,9 +1,9 @@
 import Elysia, { t } from "elysia";
 import { auth, githubAuth } from "@/src/lucia";
 
-export const login = (app: Elysia) =>
-  app.group("/login", (app) =>
-    app
+export const loginPlugin = (app: Elysia) =>
+  app.group("/login", (groupApp) =>
+    groupApp
       .get(
         "/github",
         async () => {
@@ -15,7 +15,7 @@ export const login = (app: Elysia) =>
             url: t.String(),
             state: t.String(),
           }),
-        }
+        },
       )
       .post(
         "/github/callback",
@@ -42,7 +42,6 @@ export const login = (app: Elysia) =>
             userId: user.userId,
             attributes: {},
           });
-          // @ts-ignore
           const authRequest = auth.handleRequest(context);
           authRequest.setSession(session);
 
@@ -57,6 +56,6 @@ export const login = (app: Elysia) =>
               sessionId: t.String(),
             }),
           }),
-        }
-      )
+        },
+      ),
   );

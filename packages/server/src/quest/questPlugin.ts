@@ -1,9 +1,9 @@
+import Elysia, { t } from "elysia";
 import { authenticated } from "@/src/authenticated";
 import prisma from "@/src/prisma";
-import Elysia, { t } from "elysia";
 import { Quest, QuestInput } from "@/prisma/generated/typebox";
 
-export const quest = (app: Elysia) =>
+export const questPlugin = (app: Elysia) =>
   app
     .use(authenticated)
     .get(
@@ -27,7 +27,7 @@ export const quest = (app: Elysia) =>
       },
       {
         response: t.Array(t.Omit(Quest, ["user"])),
-      }
+      },
     )
     .get(
       "/quest/:questId",
@@ -48,7 +48,7 @@ export const quest = (app: Elysia) =>
       },
       {
         response: t.Omit(Quest, ["user"]),
-      }
+      },
     )
     .post(
       "/quest",
@@ -69,7 +69,7 @@ export const quest = (app: Elysia) =>
       {
         body: t.Omit(QuestInput, ["id", "user", "steps", "user_id"]),
         response: t.Omit(Quest, ["user", "steps"]),
-      }
+      },
     )
     .post(
       "/quest/:questId",
@@ -89,7 +89,7 @@ export const quest = (app: Elysia) =>
       {
         body: t.Omit(QuestInput, ["id", "user", "steps", "user_id"]),
         response: t.Omit(Quest, ["user", "steps"]),
-      }
+      },
     )
     .delete(
       "/quest/:questId",
@@ -106,5 +106,5 @@ export const quest = (app: Elysia) =>
       },
       {
         response: t.Omit(Quest, ["user", "steps"]),
-      }
+      },
     );

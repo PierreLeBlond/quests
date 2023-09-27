@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 
-const LoginError = ({ error, reset }: { error: Error; reset: () => void }) => {
+function LoginError({ error, reset }: { error: Error; reset: () => void }) {
   return (
     <section className="flex flex-col w-64">
       <h2 className="font-bold text-2xl">Error</h2>
@@ -12,6 +12,6 @@ const LoginError = ({ error, reset }: { error: Error; reset: () => void }) => {
       </Button>
     </section>
   );
-};
+}
 
 export default LoginError;

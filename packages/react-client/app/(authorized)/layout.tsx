@@ -1,5 +1,5 @@
-import { getUser } from "@/lib/getUser";
 import { redirect } from "next/navigation";
+import { getUser } from "@/lib/getUser";
 
 const AuthorizedLayout = async ({
   children,
@@ -12,11 +12,7 @@ const AuthorizedLayout = async ({
     redirect("/login");
   }
 
-  return (
-    <>
-      <main className="w-full flex justify-center">{children}</main>
-    </>
-  );
+  return <main className="w-full flex justify-center">{children}</main>;
 };
 
 export default AuthorizedLayout;

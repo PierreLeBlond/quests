@@ -1,4 +1,3 @@
-import { cookies } from "next/headers";
 import { eden, fetchHeaders } from "./eden";
 
 export const getUser = async () => {

@@ -6,7 +6,7 @@ interface QuestItemProps {
   grabbedQuest: (QuestFormInput & { id: string }) | null;
 }
 
-export const QuestReorderItem = ({ props }: { props: QuestItemProps }) => {
+export function QuestReorderItem({ props }: { props: QuestItemProps }) {
   const { quest, grabbedQuest } = props;
 
   return (
@@ -15,8 +15,8 @@ export const QuestReorderItem = ({ props }: { props: QuestItemProps }) => {
         quest.id === grabbedQuest?.id ? "cursor-grabbing" : "cursor-grab"
       } flex items-center w-full`}
     >
-      <Grip className="m-3 h-4 w-4 shrink-0"></Grip>
+      <Grip className="m-3 h-4 w-4 shrink-0" />
       <p className="truncate">{quest.name}</p>
     </div>
   );
-};
+}

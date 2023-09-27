@@ -1,6 +1,6 @@
 import { Plus } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
+import { Input } from "@/components/ui/input";
 import { QuestFormInput } from "./QuestFormInput";
 
 type QuestCreateItemProps = {
@@ -11,7 +11,7 @@ type FormValues = {
   name: string;
 };
 
-export const QuestCreateItem = ({ props }: { props: QuestCreateItemProps }) => {
+export function QuestCreateItem({ props }: { props: QuestCreateItemProps }) {
   const { prepend } = props;
   const {
     handleSubmit,
@@ -25,7 +25,7 @@ export const QuestCreateItem = ({ props }: { props: QuestCreateItemProps }) => {
   });
 
   const onSubmit = ({ name }: FormValues) => {
-    if (name == "") {
+    if (name === "") {
       return;
     }
 
@@ -35,10 +35,10 @@ export const QuestCreateItem = ({ props }: { props: QuestCreateItemProps }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex w-full">
-      <Input placeholder="new quest" {...register("name")}></Input>
+      <Input placeholder="new quest" {...register("name")} />
       <button type="submit">
-        <Plus className={`m-3 h-4 w-4 ${isDirty || "text-stone-500"}`}></Plus>
+        <Plus className={`m-3 h-4 w-4 ${isDirty || "text-stone-500"}`} />
       </button>
     </form>
   );
-};
+}

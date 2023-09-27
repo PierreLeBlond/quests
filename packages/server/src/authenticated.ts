@@ -1,8 +1,8 @@
 import Elysia, { NotFoundError } from "elysia";
-import { session } from "./session";
+import { getSession } from "./getSession";
 
 export const authenticated = (app: Elysia) =>
-  app.use(session).derive(async ({ session }) => {
+  app.use(getSession).derive(({ session }) => {
     if (!session) {
       throw new NotFoundError();
     }

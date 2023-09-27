@@ -2,6 +2,7 @@
 
 import { Reducer, useEffect, useReducer, useRef, useState } from "react";
 import { BookMarked, Grip, Settings, Swords } from "lucide-react";
+import { useForm, useFieldArray } from "react-hook-form";
 import { Quest } from "@/types/Quest";
 import { QuestItem } from "./QuestItem";
 import { EditMode } from "./editMode";
@@ -9,7 +10,6 @@ import { QuestMenu } from "./QuestMenu";
 import { QuestReorderItem } from "./QuestReorderItem";
 import { QuestDeleteItem } from "./QuestDeleteItem";
 import { QuestEditItem } from "./QuestEditItem";
-import { useForm, useFieldArray } from "react-hook-form";
 import { QuestFormInput } from "./QuestFormInput";
 import { submit } from "./submit";
 import { QuestCreateItem } from "./QuestCreateItem";
@@ -79,13 +79,13 @@ const formStateReducerMap = new Map<
 ]);
 
 const formStateReducer = (state: FormState, action: FormAction) => {
-  const key = Array.from(formStateReducerMap.keys()).find(
-    (key) => key.name == state.name && key.type == action.type
+  const foundKey = Array.from(formStateReducerMap.keys()).find(
+    (key) => key.name === state.name && key.type === action.type,
   );
-  if (!key) {
+  if (!foundKey) {
     return state;
   }
-  const value = formStateReducerMap.get(key);
+  const value = formStateReducerMap.get(foundKey);
   if (!value) {
     return state;
   }
@@ -94,7 +94,7 @@ const formStateReducer = (state: FormState, action: FormAction) => {
   };
 };
 
-export const QuestsView = ({ props }: { props: QuestsViewProps }) => {
+export function QuestsView({ props }: { props: QuestsViewProps }) {
   const { quests } = props;
 
   const [grabbedQuest, setGrabbedQuest] = useState<
@@ -115,7 +115,7 @@ export const QuestsView = ({ props }: { props: QuestsViewProps }) => {
   });
 
   const {
-    formState: { isDirty, isSubmitting, isSubmitSuccessful },
+    formState: { isDirty },
     register,
     handleSubmit,
     control,
@@ -138,18 +138,8 @@ export const QuestsView = ({ props }: { props: QuestsViewProps }) => {
     dispatchFormAction({ type: isDirty ? "change" : "restore" });
   }, [isDirty]);
 
-  useEffect(() => {
-    dispatchFormAction({ type: "submit" });
-  }, [isSubmitting]);
-
-  useEffect(() => {
-    reset({ quests: fields });
-    dispatchFormAction({ type: "succeed" });
-    setTimeout(() => dispatchFormAction({ type: "reset" }), 1000);
-  }, [isSubmitSuccessful]);
-
   const grab = (clientY: number) => {
-    if (editMode != "reorder") {
+    if (editMode !== "reorder") {
       return;
     }
 
@@ -168,13 +158,13 @@ export const QuestsView = ({ props }: { props: QuestsViewProps }) => {
 
     const index = Math.floor(scrolledPosition / ITEM_HEIGHT);
 
-    const grabbedQuest = fields.at(index);
+    const quest = fields.at(index);
 
-    if (!grabbedQuest) {
+    if (!quest) {
       return;
     }
 
-    setGrabbedQuest(grabbedQuest);
+    setGrabbedQuest(quest);
   };
 
   const handlePointerMove = (clientY: number) => {
@@ -196,9 +186,9 @@ export const QuestsView = ({ props }: { props: QuestsViewProps }) => {
     }
 
     const toIndex = Math.floor(scrolledPosition / ITEM_HEIGHT);
-    const fromIndex = fields.findIndex((quest) => quest.id == grabbedQuest.id);
+    const fromIndex = fields.findIndex((quest) => quest.id === grabbedQuest.id);
 
-    if (toIndex == fromIndex) {
+    if (toIndex === fromIndex) {
       return;
     }
 
@@ -225,21 +215,21 @@ export const QuestsView = ({ props }: { props: QuestsViewProps }) => {
 
   return (
     <>
-      <QuestMenu props={{ editMode, setEditMode, formState }}></QuestMenu>
+      <QuestMenu props={{ editMode, setEditMode, formState }} />
       <div className="flex items-center pb-4 pt-32 w-full">
         {editMode === "open" && (
-          <BookMarked className="m-3 h-4 w-4 text-stone-500"></BookMarked>
+          <BookMarked className="m-3 h-4 w-4 text-stone-500" />
         )}
         {editMode === "reorder" && (
-          <Grip className="m-3 h-4 w-4 text-stone-500"></Grip>
+          <Grip className="m-3 h-4 w-4 text-stone-500" />
         )}
         {editMode === "delete" && (
-          <Swords className="m-3 h-4 w-4 text-stone-500"></Swords>
+          <Swords className="m-3 h-4 w-4 text-stone-500" />
         )}
         {editMode === "edit" && (
-          <Settings className="m-3 h-4 w-4 text-stone-500"></Settings>
+          <Settings className="m-3 h-4 w-4 text-stone-500" />
         )}
-        <QuestCreateItem props={{ prepend }}></QuestCreateItem>
+        <QuestCreateItem props={{ prepend }} />
       </div>
       <div
         onPointerDown={(event) =>
@@ -253,16 +243,20 @@ export const QuestsView = ({ props }: { props: QuestsViewProps }) => {
         onPointerUp={(event) => event.isPrimary && setGrabbedQuest(null)}
         onContextMenu={(event) => event.preventDefault()}
         className={`${
-          editMode == "reorder" && "touch-none"
+          editMode === "reorder" && "touch-none"
         } w-full overflow-y-auto pb-4`}
         ref={scrollAreaRef}
       >
         <form
           onSubmit={handleSubmit(async (data) => {
-            if (formState.name != "dirty") {
+            if (formState.name !== "dirty") {
               return;
             }
+            dispatchFormAction({ type: "submit" });
             await submit({ questFormInputs: data.quests });
+            reset({ quests: fields });
+            dispatchFormAction({ type: "succeed" });
+            setTimeout(() => dispatchFormAction({ type: "reset" }), 1000);
           })}
           id="questsForm"
           className="w-full"
@@ -277,23 +271,19 @@ export const QuestsView = ({ props }: { props: QuestsViewProps }) => {
                 <li
                   key={quest.id}
                   className={`${
-                    quest.id == grabbedQuest?.id &&
+                    quest.id === grabbedQuest?.id &&
                     "absolute bg-white dark:bg-black w-full rounded-md shadow-md border"
                   } flex items-center`}
                   style={{ top: grabbedPosition - ITEM_HEIGHT * 0.5 }}
                 >
-                  {editMode === "open" && (
-                    <QuestItem props={{ quest }}></QuestItem>
-                  )}
+                  {editMode === "open" && <QuestItem props={{ quest }} />}
                   {editMode === "reorder" && (
-                    <QuestReorderItem
-                      props={{ quest, grabbedQuest }}
-                    ></QuestReorderItem>
+                    <QuestReorderItem props={{ quest, grabbedQuest }} />
                   )}
                   {editMode === "delete" && (
                     <QuestDeleteItem
                       props={{ quest, remove: () => remove(index) }}
-                    ></QuestDeleteItem>
+                    />
                   )}
                   {editMode === "edit" && (
                     <QuestEditItem
@@ -303,11 +293,11 @@ export const QuestsView = ({ props }: { props: QuestsViewProps }) => {
                         register,
                         index,
                       }}
-                    ></QuestEditItem>
+                    />
                   )}
                 </li>
-                {quest.id == grabbedQuest?.id && (
-                  <li key={0} className="h-10 w-full"></li>
+                {quest.id === grabbedQuest?.id && (
+                  <li key={0} className="h-10 w-full" />
                 )}
               </>
             ))}
@@ -316,4 +306,4 @@ export const QuestsView = ({ props }: { props: QuestsViewProps }) => {
       </div>
     </>
   );
-};
+}

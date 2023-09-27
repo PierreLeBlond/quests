@@ -1,13 +1,13 @@
 import { Elysia } from "elysia";
-import { user } from "./user/user";
 import cors from "@elysiajs/cors";
-import { login } from "./login/login";
 import swagger from "@elysiajs/swagger";
-import { logout } from "./logout/logout";
-import { authenticated } from "./authenticated";
 import { OAuthRequestError } from "@lucia-auth/oauth";
-import { quest } from "./quest/quest";
-import { step } from "./step/step";
+import { user } from "./user/user";
+import { loginPlugin } from "./login/loginPlugin";
+import { logoutPlugin } from "./logout/logoutPlugin";
+import { authenticated } from "./authenticated";
+import { questPlugin } from "./quest/questPlugin";
+import { stepPlugin } from "./step/stepPlugin";
 
 const app = new Elysia()
   .use(cors())
@@ -29,25 +29,17 @@ const app = new Elysia()
     }
 
     set.status = 500;
-    console.log(error);
     return "Internal server error :(";
   })
-  .use(login)
+  .use(loginPlugin)
   .use(user)
   .use(authenticated)
-  .get("/hello", async ({ session }) => {
-    return { message: `Hello ${session.user.githubUsername} !` };
-  })
-  .use(quest)
-  .use(step)
-  .use(logout)
+  .use(questPlugin)
+  .use(stepPlugin)
+  .use(logoutPlugin)
   .listen({
     hostname: "0.0.0.0",
     port: 3000,
   });
 
 export type App = typeof app;
-
-console.log(
-  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
-);

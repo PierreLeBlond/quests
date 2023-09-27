@@ -1,9 +1,9 @@
+import Elysia, { t } from "elysia";
 import { authenticated } from "@/src/authenticated";
 import prisma from "@/src/prisma";
-import Elysia, { t } from "elysia";
 import { Step, StepInput } from "@/prisma/generated/typebox";
 
-export const step = (app: Elysia) =>
+export const stepPlugin = (app: Elysia) =>
   app
     .use(authenticated)
     .get(
@@ -24,7 +24,7 @@ export const step = (app: Elysia) =>
       },
       {
         response: t.Array(t.Omit(Step, ["quest"])),
-      }
+      },
     )
     .get(
       "/quest/:questId/step/:id",
@@ -45,7 +45,7 @@ export const step = (app: Elysia) =>
       },
       {
         response: t.Omit(Step, ["quest"]),
-      }
+      },
     )
     .post(
       "/quest/:questId/step",
@@ -57,7 +57,7 @@ export const step = (app: Elysia) =>
               connect: {
                 id: questId,
                 user: {
-                  id: session.userId.id,
+                  id: session.user.userId,
                 },
               },
             },
@@ -69,7 +69,7 @@ export const step = (app: Elysia) =>
       {
         body: t.Omit(StepInput, ["id", "quest", "quest_id"]),
         response: t.Omit(Step, ["quest"]),
-      }
+      },
     )
     .post(
       "/quest/:questId/step/:id",
@@ -80,7 +80,7 @@ export const step = (app: Elysia) =>
             quest: {
               id: questId,
               user: {
-                id: session.userId.id,
+                id: session.user.userId,
               },
             },
           },
@@ -92,7 +92,7 @@ export const step = (app: Elysia) =>
       {
         body: t.Omit(StepInput, ["id", "quest", "quest_id"]),
         response: t.Omit(Step, ["quest"]),
-      }
+      },
     )
     .delete(
       "/quest/:questId/step/:id",
@@ -103,7 +103,7 @@ export const step = (app: Elysia) =>
             quest: {
               id: questId,
               user: {
-                id: session.userId.id,
+                id: session.user.userId,
               },
             },
           },
@@ -112,5 +112,5 @@ export const step = (app: Elysia) =>
       },
       {
         response: t.Omit(Step, ["quest"]),
-      }
+      },
     );

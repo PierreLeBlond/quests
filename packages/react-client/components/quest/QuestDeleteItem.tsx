@@ -6,7 +6,7 @@ interface QuestItemProps {
   remove: () => void;
 }
 
-export const QuestDeleteItem = ({ props }: { props: QuestItemProps }) => {
+export function QuestDeleteItem({ props }: { props: QuestItemProps }) {
   const { quest, remove } = props;
 
   return (
@@ -14,8 +14,8 @@ export const QuestDeleteItem = ({ props }: { props: QuestItemProps }) => {
       <Swords
         className="m-3 h-4 w-4 text-rose-500 cursor-pointer shrink-0"
         onClick={() => remove()}
-      ></Swords>
+      />
       <p className="truncate">{quest.name}</p>
     </>
   );
-};
+}

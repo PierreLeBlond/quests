@@ -1,19 +1,13 @@
 import Elysia, { t } from "elysia";
-import { session } from "@/src/session";
+import { getSession } from "@/src/getSession";
 
 export const user = (app: Elysia) =>
-  app.use(session).get(
-    "/user",
-    async ({ session }) => {
-      return { user: session?.user };
-    },
-    {
-      response: t.Object({
-        user: t.Optional(
-          t.Object({
-            githubUsername: t.String(),
-          })
-        ),
-      }),
-    }
-  );
+  app.use(getSession).get("/user", ({ session }) => ({ user: session?.user }), {
+    response: t.Object({
+      user: t.Optional(
+        t.Object({
+          githubUsername: t.String(),
+        }),
+      ),
+    }),
+  });

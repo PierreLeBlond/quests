@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <Menu></Menu>
+          <Menu />
           <main className="relative flex h-screen w-screen overflow-hidden">
             {children}
           </main>
