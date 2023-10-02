@@ -1,7 +1,10 @@
+import { Step } from "./Step";
+
 export interface Quest {
   id: string;
   index: number;
   name: string;
+  steps: Step[];
 }
 
 export interface QuestInput {

@@ -63,6 +63,8 @@ model Step {
   description String
   done        Boolean @default(false)
 
+  index Int
+
   quest_id String
   quest    Quest  @relation(references: [id], fields: [quest_id], onDelete: Cascade)
 

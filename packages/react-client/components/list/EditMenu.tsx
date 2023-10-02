@@ -3,13 +3,13 @@ import { Toggle } from "@/components/ui/toggle";
 import { useAppState } from "@/state/StateProvider";
 import { EditMode } from "./editMode";
 
-interface QuestMenuProps {
+interface EditMenuProps {
   editMode: EditMode;
   setEditMode: (editMode: EditMode) => void;
   save: () => Promise<void>;
 }
 
-export function QuestMenu({ props }: { props: QuestMenuProps }) {
+export function EditMenu({ props }: { props: EditMenuProps }) {
   const { editMode, setEditMode, save } = props;
   const state = useAppState();
 

@@ -4,16 +4,17 @@ import { Input } from "@/components/ui/input";
 import { EditMode } from "../editMode";
 
 type FormValues = {
-  name: string;
+  value: string;
 };
 
-type QuestCreateItemProps = {
+type CreateItemProps = {
   editMode: EditMode | null;
-  prepend: (name: string) => void;
+  placeholder: string;
+  prepend: (value: string) => void;
 }
 
-export function QuestCreateItem({ props }: { props: QuestCreateItemProps }) {
-  const { editMode, prepend } = props;
+export function CreateItem({ props }: { props: CreateItemProps }) {
+  const { editMode, placeholder, prepend } = props;
   const {
     handleSubmit,
     formState: { isDirty },
@@ -21,12 +22,12 @@ export function QuestCreateItem({ props }: { props: QuestCreateItemProps }) {
     reset
   } = useForm<FormValues>({
     defaultValues: {
-      name: "",
+      value: "",
     },
   });
 
-  const submit = async ({ name }: FormValues) => {
-    prepend(name);
+  const submit = async ({ value }: FormValues) => {
+    prepend(value);
     reset();
   }
 
@@ -53,7 +54,7 @@ export function QuestCreateItem({ props }: { props: QuestCreateItemProps }) {
         )
       }
       <form onSubmit={handleSubmit(submit)} className="flex w-full">
-        <Input placeholder="new quest" {...register("name")} />
+        <Input placeholder={placeholder || "new item"} {...register("value")} />
         <button type="submit">
           <Plus className={`m-3 h-4 w-4 ${isDirty || "text-stone-500"}`} />
         </button>

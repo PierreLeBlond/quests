@@ -4,6 +4,7 @@ export const StepInput = Type.Object({
   id: Type.String(),
   description: Type.String(),
   done: Type.Optional(Type.Boolean()),
+  index: Type.Number(),
   quest_id: Type.String(),
   quest: Type.Object({
     id: Type.String(),

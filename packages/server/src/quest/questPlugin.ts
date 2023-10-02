@@ -4,21 +4,21 @@ import prisma from "@/src/prisma";
 import { Quest, QuestInput } from "@/prisma/generated/typebox";
 
 const reorder = (userId: string, from: number, to: number) => prisma.quest.updateMany({
-          where: {
-            user: {
-              id: userId,
-            },
-            index :{
-              gt: from,
-              lt: to
-            }
-          },
-          data: {
-            index: {
-              increment: from < to ? 1 : -1
-            }
-          }
-        })
+  where: {
+    user: {
+      id: userId,
+    },
+    index: {
+      gt: from,
+      lt: to
+    }
+  },
+  data: {
+    index: {
+      increment: from < to ? 1 : -1
+    }
+  }
+})
 
 export const questPlugin = (app: Elysia) =>
   app
@@ -72,18 +72,18 @@ export const questPlugin = (app: Elysia) =>
       async ({ session, body: { name, index } }) => {
 
         const { 1: quest } = await prisma.$transaction([
-        reorder(session.user.userId, -1, 0),
-        prisma.quest.create({
-          data: {
-            name,
-            index,
-            user: {
-              connect: {
-                id: session.user.userId,
+          reorder(session.user.userId, -1, 0),
+          prisma.quest.create({
+            data: {
+              name,
+              index,
+              user: {
+                connect: {
+                  id: session.user.userId,
+                },
               },
             },
-          },
-        })
+          })
         ])
 
         return quest;

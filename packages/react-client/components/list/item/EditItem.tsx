@@ -1,13 +1,13 @@
 import { Settings } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
-interface QuestItemProps {
-  name: string;
-  update: (name: string) => void;
+interface EditItemProps {
+  value: string;
+  update: (value: string) => void;
 }
 
-export function QuestEditItem({ props }: { props: QuestItemProps }) {
-  const { name, update } = props;
+export function EditItem({ props }: { props: EditItemProps }) {
+  const { value, update } = props;
 
   const handleBlur = ({ target }: { target: HTMLInputElement }) => {
     update(target.value);
@@ -18,9 +18,9 @@ export function QuestEditItem({ props }: { props: QuestItemProps }) {
       <Settings className="m-3 h-4 w-4" />
       <Input
         autoComplete="off"
-        name="name"
+        name="value"
         className="mr-4"
-        defaultValue={name}
+        defaultValue={value}
         onBlur={handleBlur}
       />
     </>

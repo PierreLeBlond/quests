@@ -1,13 +1,13 @@
 import { Grip } from "lucide-react";
 
-interface QuestItemProps {
-  name: string;
+interface ItemProps {
+  value: string;
   grabbed: boolean;
   grabbedPosition: number;
 }
 
-export function QuestReorderItem({ props }: { props: QuestItemProps }) {
-  const { name, grabbed, grabbedPosition } = props;
+export function ReorderItem({ props }: { props: ItemProps }) {
+  const { value, grabbed, grabbedPosition } = props;
 
   return (
     <>
@@ -22,7 +22,7 @@ export function QuestReorderItem({ props }: { props: QuestItemProps }) {
             } flex items-center w-full`}
         >
           <Grip className="m-3 h-4 w-4 shrink-0" />
-          <p className="truncate">{name}</p>
+          <p className="truncate">{value}</p>
         </div>
       </div>
       {
