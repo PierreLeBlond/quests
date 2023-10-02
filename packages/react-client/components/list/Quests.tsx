@@ -82,17 +82,18 @@ export function Quests({ props }: { props: QuestsProps }) {
           >
             {fields.map(({ id, name, questId }, index) => {
               const quest = quests.find(currentQuest => currentQuest.id === questId) as Quest;
-              const doneSteps = quest.steps.filter(step => step.done);
-              const done = quest.steps.length > 0 && quest.steps.length === doneSteps.length;
+              const steps = quest ? quest.steps : [];
+              const doneSteps = quest ? quest.steps.filter(step => step.done) : [];
+              const done = steps.length > 0 && steps.length === doneSteps.length;
               return (
                 <li key={id} className={`${done && "line-through text-stone-500"} relative flex items-center w-full`}>
-                  {quest.steps.length > 0 && (
+                  {steps.length > 0 && (
                     <>
                       <div className="absolute flex bottom-0 h-0.5 w-full pl-10 pr-10">
-                        <div className="bg-stone-500 h-0.5" style={{ width: `${(doneSteps.length / quest.steps.length) * 100}%` }} />
-                        <div className="bg-stone-500/50 h-0.5" style={{ width: `${(1.0 - doneSteps.length / quest.steps.length) * 100}%` }} />
+                        <div className="bg-stone-500 h-0.5" style={{ width: `${(doneSteps.length / steps.length) * 100}%` }} />
+                        <div className="bg-stone-500/50 h-0.5" style={{ width: `${(1.0 - doneSteps.length / steps.length) * 100}%` }} />
                       </div>
-                      <p className="absolute right-10 bottom-0 text-stone-500 text-xs">{doneSteps.length}/{quest.steps.length}</p>
+                      <p className="absolute right-10 bottom-0 text-stone-500 text-xs">{doneSteps.length}/{steps.length}</p>
                     </>
                   )}
                   {editMode === "open" && (
