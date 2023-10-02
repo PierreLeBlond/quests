@@ -1,16 +1,20 @@
 "use server";
 
 import { eden, fetchHeaders } from "@/lib/eden";
+import { safeAction } from "@/lib/safeAction";
 import { Quest } from "@/types/Quest";
-import { QuestFormInput } from "./QuestFormInput";
+import { z } from "zod";
 
-export const submit = async ({
-  questFormInputs,
-}: {
-  questFormInputs: QuestFormInput[];
-}) => {
-  "use server";
+const schema = z.object({
+  quests: z.array(z.object({
+  name: z.string().min(1),
+  questId: z.string().optional()
+  }))
+});
 
+type Data = z.infer<typeof schema>;
+
+export const saveQuests = safeAction(schema, async (data: Data) => {
   const headers = fetchHeaders();
 
   const { data: quests, error } = await eden.quests.get(headers);
@@ -19,7 +23,7 @@ export const submit = async ({
     throw new Error(error?.message);
   }
 
-  const indexedQuests = questFormInputs.map((quest, index) => ({
+  const indexedQuests = data.quests.map((quest, index) => ({
     ...quest,
     index,
   }));
@@ -57,4 +61,4 @@ export const submit = async ({
     ),
     ...deletedQuests.map((quest) => eden.quest[quest.id].delete(headers)),
   ]);
-};
+});
