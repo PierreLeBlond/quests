@@ -33,7 +33,11 @@ export const questPlugin = (app: Elysia) =>
             },
           },
           include: {
-            steps: true,
+            steps: {
+              orderBy: {
+                index: "asc"
+              }
+            },
           },
           orderBy: {
             index: "asc",
@@ -57,7 +61,11 @@ export const questPlugin = (app: Elysia) =>
             },
           },
           include: {
-            steps: true,
+            steps: {
+              orderBy: {
+                index: "asc"
+              },
+            }
           },
         });
 

@@ -18,6 +18,9 @@ export const stepPlugin = (app: Elysia) =>
               },
             },
           },
+          orderBy: {
+            index: "asc",
+          },
         });
 
         return steps;
