@@ -9,7 +9,9 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "quests",
+  applicationName: "Quests",
   description: "todo app to bring with you on your adventures",
+  manifest: "./manifest.json"
 };
 
 export default function RootLayout({

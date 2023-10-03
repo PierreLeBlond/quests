@@ -3,6 +3,7 @@
 /**/*.d.ts
 /**/.next/
 /**/dist/
+/**/public/
 
 /**/generated/
 /**/components/ui/
