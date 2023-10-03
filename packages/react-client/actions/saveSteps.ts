@@ -3,6 +3,7 @@
 import { eden, fetchHeaders } from "@/lib/eden";
 import { safeAction } from "@/lib/safeAction";
 import { Step } from "@/types/Step";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 const schema = z.object({
@@ -10,7 +11,7 @@ const schema = z.object({
   steps: z.array(z.object({
     description: z.string().min(1),
     done: z.boolean(),
-    stepId: z.string().optional()
+    stepId: z.string()
   }))
 });
 
@@ -30,29 +31,24 @@ export const saveSteps = safeAction(schema, async (data: Data) => {
     index,
   }));
 
-  const newSteps = indexedSteps.filter(
-    (step) => step.stepId === undefined,
-  );
-  // TODO: Improve by updating only when necessary
   const updatedSteps = indexedSteps.filter(
-    (step) => step.stepId !== undefined,
-  ) as { description: string; index: number; done: boolean, stepId: string }[];
+    (indexedStep) => {
+      const oldStep = steps.find(step => step.id === indexedStep.stepId);
+      if (!oldStep) {
+        return true;
+      }
+      return !oldStep
+        || indexedStep.description !== oldStep.description
+        || indexedStep.done !== oldStep.done
+        || indexedStep.index !== oldStep.index;
+    }
+  );
   const deletedSteps = steps.filter(
     (step: Step) =>
       !indexedSteps.find((indexedStep) => indexedStep.stepId === step.id),
   );
 
   await Promise.all([
-    ...newSteps.map((step) =>
-      eden.quest[data.questId].step.post({
-        ...{
-          description: step.description,
-          done: step.done,
-          index: step.index,
-        },
-        ...headers,
-      }),
-    ),
     ...updatedSteps.map((step) =>
       eden.quest[data.questId].step[step.stepId].post({
         ...{
@@ -65,4 +61,7 @@ export const saveSteps = safeAction(schema, async (data: Data) => {
     ),
     ...deletedSteps.map((step) => eden.quest[data.questId].step[step.id].delete(headers)),
   ]);
+
+  revalidatePath("/quest");
+  revalidatePath("/quests");
 });

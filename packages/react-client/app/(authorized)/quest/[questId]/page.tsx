@@ -13,7 +13,6 @@ const StepsPage = async ({ params }: { params: { questId: string } }) => {
   return (
     <>
       <h1 className="fixed top-0 left-0 text-3xl font-bold p-2">Quest</h1>
-      <p className="fixed top-8 text-stone-500 left-0 text-2xl p-2">{data.name}</p>
       <Link href="/quests" className="fixed top-20 left-0 p-2" scroll={false}>
         <ArrowLeft className="h-8 w-8" />
       </Link>

@@ -27,6 +27,10 @@ const stateReducerMap = new Map<
     { name: "dirty", label: "save?" },
   ],
   [
+    { name: "idle", type: "submit" },
+    { name: "submitting", label: "saving..." },
+  ],
+  [
     { name: "dirty", type: "restore" },
     { name: "idle", label: "" },
   ],

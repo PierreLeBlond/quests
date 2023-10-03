@@ -1,16 +1,10 @@
 import { BookMarked } from "lucide-react";
 
-interface ItemProps {
-  value: string;
-}
-
-export function Item({ props }: { props: ItemProps }) {
-  const { value } = props;
-
+export function Item({ children }: { children: React.ReactNode }) {
   return (
-    <>
+    <div className="relative flex items-center w-full">
       <BookMarked className="m-3 h-4 w-4 shrink-0" />
-      <p className="truncate">{value}</p>
-    </>
+      {children}
+    </div>
   );
 }

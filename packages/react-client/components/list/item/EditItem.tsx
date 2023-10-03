@@ -18,7 +18,6 @@ export function EditItem({ props }: { props: EditItemProps }) {
       <Settings className="m-3 h-4 w-4" />
       <Input
         autoComplete="off"
-        name="value"
         className="mr-4"
         defaultValue={value}
         onBlur={handleBlur}

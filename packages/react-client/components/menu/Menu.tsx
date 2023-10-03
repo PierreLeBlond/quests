@@ -37,7 +37,7 @@ const Menu = async () => {
   );
 
   return (
-    <nav className="fixed right-0 top-0 p-4 z-10">
+    <nav className="fixed flex right-2 top-0 p-4 z-10">
       <DropdownMenu>
         <DropdownMenuTrigger>
           <MoreVertical className="w-6 h-6" />
