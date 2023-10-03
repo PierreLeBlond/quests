@@ -27,8 +27,8 @@ export function CreateItem({ props }: { props: CreateItemProps }) {
   });
 
   const submit = async ({ value }: FormValues) => {
-    await create(value);
     reset();
+    await create(value);
   }
 
   return (
