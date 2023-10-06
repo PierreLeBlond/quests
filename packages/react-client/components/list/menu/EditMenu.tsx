@@ -1,47 +1,24 @@
-import { Flame, Grip, Settings, Swords } from "lucide-react";
+import { Grip, Settings, Swords } from "lucide-react";
 import { Toggle } from "@/components/ui/toggle";
-import { useAppState } from "@/state/StateProvider";
-import { EditMode } from "./editMode";
+import { EditMode } from "../editMode";
+import { StateCue } from "./StateCue";
 
-interface EditMenuProps {
+type EditMenuProps = {
   editMode: EditMode;
   setEditMode: (editMode: EditMode) => void;
-  save: () => Promise<void>;
 }
 
 export function EditMenu({ props }: { props: EditMenuProps }) {
-  const { editMode, setEditMode, save } = props;
-  const state = useAppState();
+  const { editMode, setEditMode } = props;
 
   return (
     <div className="flex justify-center">
       <div className="absolute grid grid-cols-3">
-        <button
-          type="button"
-          onClick={save}
+        <div
           className="relative col-start-2 row-start-1 p-3 cursor-pointer"
         >
-          <div className="absolute text-sm text-justify left-4 bottom-8 flex flex-col">
-            {state.label}
-            {state.label !== "" && (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="40"
-                height="12"
-                strokeWidth="1"
-                fill="none"
-                viewBox="0 0 40 12"
-                className="stroke-current"
-              >
-                <path d="m 0,0 5,0 5,8 5,-8 h 25" />
-              </svg>
-            )}
-          </div>
-          <Flame
-            className={`h-4 w-4 ${state.name === "dirty" && "text-orange-500"
-              } ${state.name === "submitting" && "text-rose-500"}`}
-          />
-        </button>
+          <StateCue />
+        </div>
         <Toggle
           pressed={editMode === "reorder"}
           onPressedChange={(pressed) =>

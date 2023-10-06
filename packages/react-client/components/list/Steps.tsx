@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useAppStateDispatch } from "@/state/StateProvider";
 import { saveSteps } from "@/actions/saveSteps";
 import { Quest } from "@/types/Quest";
-import { createStep } from "@/actions/createStep";
+import { useAutosave } from "@/hooks/useAutosave";
 import { EditMode } from "./editMode";
 import { ReorderArea } from "./ReorderArea";
-import { EditMenu } from "./EditMenu";
+import { EditMenu } from "./menu/EditMenu";
 import { CreateItem } from "./item/CreateItem";
 import { Item } from "./item/Item";
 import { ReorderItem } from "./item/ReorderItem";
@@ -22,8 +22,10 @@ type StepsProps = {
 type StepField = {
   description: string;
   done: boolean;
-  stepId: string;
+  stepId?: string;
 }
+
+type StepFieldWithId = StepField & { id: string };
 
 export function Steps({ props }: { props: StepsProps }) {
   const { quest } = props;
@@ -38,9 +40,7 @@ export function Steps({ props }: { props: StepsProps }) {
   const dispatch = useAppStateDispatch();
 
   const {
-    formState: { isDirty },
-    control,
-    reset,
+    control
   } = useForm<{
     steps: StepField[];
   }>({
@@ -48,44 +48,57 @@ export function Steps({ props }: { props: StepsProps }) {
       steps: quest.steps.map(({ description, done, id }) => ({ description, done, stepId: id })),
     },
   });
-  const { fields, update, move, remove } = useFieldArray<{
+  const { fields, update, move, remove, prepend } = useFieldArray<{
     steps: StepField[];
   }>({
     control,
     name: "steps",
   });
 
-  useEffect(() => {
-    dispatch({ type: isDirty ? 'change' : 'restore' });
-  }, [dispatch, isDirty])
-
-  useEffect(() => {
-    reset({ steps: quest.steps.map(({ description, done, id }) => ({ description, done, stepId: id })) });
-  }, [reset, quest.steps]);
-
-  const save = async () => {
-    if (!isDirty) {
-      return;
+  // Db is kept in sync with actual fields values
+  const save = useCallback(async () => {
+    if (quest.steps.length === fields.length) {
+      const match = quest.steps.every((step, index) => {
+        const field = fields.at(index);
+        if (!field) {
+          return false;
+        }
+        return step.description === field.description
+          && step.done === field.done && (!field.stepId || field.stepId === step.id);
+      });
+      if (match) {
+        return;
+      }
     }
-    dispatch({ type: "submit" });
-    await saveSteps({ steps: fields, questId: quest.id });
-    dispatch({ type: "succeed" });
-    setTimeout(() => dispatch({ type: "reset" }), 1000);
-  }
 
-  const create = async (value: string) => {
     dispatch({ type: "submit" });
-    await createStep({ description: value, index: 0, done: false, questId: quest.id });
-    dispatch({ type: "succeed" });
-    setTimeout(() => dispatch({ type: "reset" }), 1000);
-  }
+    const { data, validationError, serverError } = await saveSteps({ steps: fields, questId: quest.id });
+
+    if (validationError || serverError) {
+      dispatch({ type: "fail" });
+    }
+
+    if (data) {
+      dispatch({ type: "succeed" });
+      data.forEach(newStep => {
+        const index = fields.findIndex(field => field.id === newStep.id);
+        const field = fields.at(index) as StepFieldWithId;
+        update(index, {
+          ...field,
+          stepId: newStep.stepId
+        });
+      });
+    }
+  }, [quest, fields, dispatch, update]);
+
+  useAutosave(save, grabbedId === null);
 
   return (
     <>
-      <EditMenu props={{ editMode, setEditMode, save }} />
-      <div className="pt-32 w-full">
+      <EditMenu props={{ editMode, setEditMode }} />
+      <div className="flex flex-col pt-32 w-full h-full">
         <p className="text-sm text-stone-500 p-4 font-bold truncate">{quest.name}</p>
-        <CreateItem props={{ editMode, placeholder: "new step", create }} />
+        <CreateItem props={{ editMode, placeholder: "new step", prepend: (value: string) => prepend({ description: value, done: false }) }} />
         <ReorderArea props={{ active: editMode === "reorder", setGrabbedPosition, ids: fields.map(({ id }) => id), setGrabbedId, grabbedId, move }} >
           <ul
             className="flex flex-col relative w-full"

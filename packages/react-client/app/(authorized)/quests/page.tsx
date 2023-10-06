@@ -11,7 +11,7 @@ const QuestsPage = async () => {
   return (
     <>
       <h1 className="fixed top-0 left-0 text-3xl font-bold p-2">Quests</h1>
-      <main className="pt-10 flex flex-col w-full items-center">
+      <main className="relative pt-10 flex flex-col w-full items-center">
         <Quests props={{ quests: data }} />
       </main>
     </>

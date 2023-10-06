@@ -84,6 +84,10 @@ export function ReorderArea({ children, props }: { children: React.ReactNode, pr
     scrollAreaRef.current.scrollBy(0, scrollStart - clientYDiff);
   };
 
+  const release = () => {
+    setGrabbedId(null);
+  }
+
   return active
     ? (<div
       onPointerDown={
@@ -95,10 +99,10 @@ export function ReorderArea({ children, props }: { children: React.ReactNode, pr
           ? handlePointerMove(event.clientY)
           : scroll(event.clientY)
       }
-      onPointerUp={(event) => event.isPrimary && setGrabbedId(null)}
+      onPointerUp={(event) => event.isPrimary && release()}
       onContextMenu={(event) => event.preventDefault()}
       className="select-none touch-none w-full overflow-y-auto mb-4"
       ref={scrollAreaRef}
     > {children}</div >)
-    : (<div className="w-full overflow-y-auto mb-4">{children}</div>)
+    : (<div className="w-full flex overflow-y-auto mb-4">{children}</div>)
 }

@@ -13,10 +13,10 @@ const StepsPage = async ({ params }: { params: { questId: string } }) => {
   return (
     <>
       <h1 className="fixed top-0 left-0 text-3xl font-bold p-2">Quest</h1>
-      <Link href="/quests" className="fixed top-20 left-0 p-2" scroll={false}>
+      <Link href="/quests" className="fixed top-20 left-0 p-2 z-10" scroll={false}>
         <ArrowLeft className="h-8 w-8" />
       </Link>
-      <main className="pt-10 flex flex-col w-full items-center">
+      <main className="relative pt-10 flex flex-col w-full items-center">
         <Steps props={{ quest: data }} />
       </main>
     </>

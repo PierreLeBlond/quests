@@ -1,15 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { Quest } from "@/types/Quest";
 import { useFieldArray, useForm } from "react-hook-form";
-import { useAppStateDispatch } from "@/state/StateProvider";
-import { saveQuests } from "@/actions/saveQuests";
 import Link from "next/link";
-import { createQuest } from "@/actions/createQuest";
+import { useAutosave } from "@/hooks/useAutosave";
+import { saveQuests } from "@/actions/saveQuests";
+import { useAppStateDispatch } from "@/state/StateProvider";
 import { Item } from "./item/Item";
 import { EditMode } from "./editMode";
-import { EditMenu } from "./EditMenu";
+import { EditMenu } from "./menu/EditMenu";
 import { ReorderItem } from "./item/ReorderItem";
 import { DeleteItem } from "./item/DeleteItem";
 import { EditItem } from "./item/EditItem";
@@ -22,69 +22,86 @@ type QuestsProps = {
 
 type QuestField = {
   name: string;
-  questId: string;
+  questId?: string;
 }
+type QuestFieldWithId = QuestField & { id: string };
 
 export function Quests({ props }: { props: QuestsProps }) {
   const { quests } = props;
 
+  // Lifted up states
   const [grabbedId, setGrabbedId] = useState<
     string | null
   >(null);
   const [grabbedPosition, setGrabbedPosition] = useState(0);
   const [editMode, setEditMode] = useState<EditMode>("open");
 
-  const dispatch = useAppStateDispatch();
-
+  // Global form state
   const {
-    formState: { isDirty },
     control,
-    reset,
   } = useForm<{
     quests: QuestField[];
   }>({
     defaultValues: {
-      quests: quests.map(({ name, id, steps }) => ({ name, questId: id, steps })),
+      quests: quests.map(({ name, id }) => ({ name, questId: id })),
     },
   });
-  const { fields, update, move, remove } = useFieldArray<{
+  const { fields, update, move, remove, prepend } = useFieldArray<{
     quests: QuestField[];
   }>({
     control,
     name: "quests",
   });
 
-  useEffect(() => {
-    dispatch({ type: isDirty ? 'change' : 'restore' });
-  }, [dispatch, isDirty])
+  const dispatch = useAppStateDispatch();
 
-  useEffect(() => {
-    reset({ quests: quests.map(({ name, id, steps }) => ({ name, questId: id, steps })) });
-  }, [reset, quests]);
-
-  const save = async () => {
-    if (!isDirty) {
-      return;
+  // Db is kept in sync with actual fields values
+  const save = useCallback(async () => {
+    if (quests.length === fields.length) {
+      const match = quests.every((quest, index) => {
+        const field = fields.at(index);
+        if (!field) {
+          return false;
+        }
+        return quest.name === field.name && (!field.questId || field.questId === quest.id);
+      });
+      if (match) {
+        return;
+      }
     }
-    dispatch({ type: "submit" });
-    await saveQuests({ quests: fields });
-    dispatch({ type: "succeed" });
-    setTimeout(() => dispatch({ type: "reset" }), 1000);
-  }
 
-  const create = async (value: string) => {
     dispatch({ type: "submit" });
-    await createQuest({ name: value, index: 0 });
-    dispatch({ type: "succeed" });
-    setTimeout(() => dispatch({ type: "reset" }), 1000);
-  }
+    const { data, validationError, serverError } = await saveQuests({ quests: fields });
+
+    if (validationError || serverError) {
+      dispatch({ type: "fail" });
+    }
+
+    if (data) {
+      dispatch({ type: "succeed" });
+      data.forEach(newQuest => {
+        const index = fields.findIndex(field => field.id === newQuest.id);
+        const field = fields.at(index) as QuestFieldWithId;
+        update(index, {
+          ...field,
+          questId: newQuest.questId
+        });
+      });
+    }
+  }, [quests, fields, dispatch, update]);
+
+  useAutosave(save, grabbedId === null);
 
   return (
     <>
-      <EditMenu props={{ editMode, setEditMode, save }} />
-      <div className="pt-32 w-full">
-        <CreateItem props={{ editMode, placeholder: "new quest", create }} />
-        <ReorderArea props={{ active: editMode === "reorder", setGrabbedPosition, ids: fields.map(({ id }) => id), setGrabbedId, grabbedId, move }} >
+      <EditMenu props={{ editMode, setEditMode }} />
+      <div className="flex flex-col pt-32 w-full h-full">
+        <CreateItem props={{
+          editMode, placeholder: "new quest", prepend: (value: string) => prepend({ name: value })
+        }} />
+        <ReorderArea props={{
+          active: editMode === "reorder", setGrabbedPosition, ids: fields.map(({ id }) => id), setGrabbedId, grabbedId, move
+        }} >
           <ul
             className="flex flex-col relative w-full"
           >
@@ -115,7 +132,7 @@ export function Quests({ props }: { props: QuestsProps }) {
                 <li key={id} className={`${done && "line-through text-stone-500"} flex items-center w-full`}>
 
                   {editMode === "open" && (
-                    <Link href={`quest/${questId}`} className="flex items-center w-full" scroll={false}>
+                    <Link href={`quest/${questId}`} className={`${!questId && "pointer-events-none text-stone-500"} flex items-center w-full`} scroll={false}>
                       <Item>{item}</Item>
                     </Link>
                   )}
@@ -123,13 +140,20 @@ export function Quests({ props }: { props: QuestsProps }) {
                     <ReorderItem props={{ grabbed: id === grabbedId, grabbedPosition }}>{item}</ReorderItem>
                   )}
                   {editMode === "delete" && (
-                    <DeleteItem props={{ remove: () => remove(index) }}>{item}</DeleteItem>
-                  )}
+                    <DeleteItem props={{
+                      remove: () => {
+                        remove(index);
+                      }
+                    }}>{item}</DeleteItem>
+                  )
+                  }
                   {editMode === "edit" && (
                     <EditItem
                       props={{
                         value: name,
-                        update: (value: string) => update(index, { name: value, questId })
+                        update: (value: string) => {
+                          update(index, { name: value, questId });
+                        }
                       }}
                     />
                   )}

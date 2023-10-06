@@ -1,6 +1,6 @@
 import { Grip } from "lucide-react";
 
-interface ItemProps {
+type ItemProps = {
   grabbed: boolean;
   grabbedPosition: number;
 }

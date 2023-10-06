@@ -10,11 +10,11 @@ type FormValues = {
 type CreateItemProps = {
   editMode: EditMode | null;
   placeholder: string;
-  create: (value: string) => Promise<void>;
+  prepend: (value: string) => void;
 }
 
 export function CreateItem({ props }: { props: CreateItemProps }) {
-  const { editMode, placeholder, create } = props;
+  const { editMode, placeholder, prepend } = props;
   const {
     handleSubmit,
     formState: { isDirty },
@@ -26,9 +26,9 @@ export function CreateItem({ props }: { props: CreateItemProps }) {
     },
   });
 
-  const submit = async ({ value }: FormValues) => {
+  const submit = ({ value }: FormValues) => {
     reset();
-    await create(value);
+    prepend(value);
   }
 
   return (

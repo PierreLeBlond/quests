@@ -9,7 +9,8 @@ import { z } from "zod";
 const schema = z.object({
   quests: z.array(z.object({
     name: z.string().min(1),
-    questId: z.string()
+    questId: z.string().optional(),
+    id: z.string()
   }))
 });
 
@@ -29,6 +30,10 @@ export const saveQuests = safeAction(schema, async (data: Data) => {
     index,
   }));
 
+  const newQuests = indexedQuests.filter(
+    (quest) => quest.questId === undefined,
+  );
+
   const updatedQuests = indexedQuests.filter(
     (indexedQuest) => {
       const oldQuest = quests.find(quest => quest.id === indexedQuest.questId);
@@ -39,10 +44,20 @@ export const saveQuests = safeAction(schema, async (data: Data) => {
         || indexedQuest.name !== oldQuest.name
         || indexedQuest.index !== oldQuest.index;
     }
-  );
+  ) as { name: string; index: number; questId: string }[];;
   const deletedQuests = quests.filter(
     (quest: Quest) =>
       !indexedQuests.find((indexedQuest) => indexedQuest.questId === quest.id),
+  );
+
+  const createdQuests = await Promise.all(
+    newQuests.map((quest) => eden.quest.post({
+      ...{
+        name: quest.name,
+        index: quest.index,
+      },
+      ...headers,
+    }))
   );
 
   await Promise.all([
@@ -59,4 +74,16 @@ export const saveQuests = safeAction(schema, async (data: Data) => {
   ]);
 
   revalidatePath("/quests");
+
+  return newQuests.map((newQuest, index) => {
+    const response = createdQuests.at(index);
+    if (!response?.data) {
+      return newQuest;
+    }
+    return {
+      ...response.data,
+      questId: response.data.id,
+      id: newQuest.id
+    }
+  })
 });

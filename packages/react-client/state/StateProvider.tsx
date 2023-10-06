@@ -2,18 +2,14 @@
 
 import React, { createContext, useReducer, Dispatch, useContext } from "react";
 
-type StateName = "idle" | "dirty" | "submitting" | "submitted" | "failed";
+type StateName = "idle" | "submitting" | "submitted" | "failed";
 type State = {
   name: StateName;
-  label: string;
 };
 type ActionType =
-  | "change"
-  | "restore"
   | "submit"
   | "succeed"
-  | "fail"
-  | "reset";
+  | "fail";
 type Action = {
   type: ActionType;
 };
@@ -23,44 +19,24 @@ const stateReducerMap = new Map<
   State
 >([
   [
-    { name: "idle", type: "change" },
-    { name: "dirty", label: "save?" },
-  ],
-  [
     { name: "idle", type: "submit" },
-    { name: "submitting", label: "saving..." },
-  ],
-  [
-    { name: "dirty", type: "restore" },
-    { name: "idle", label: "" },
-  ],
-  [
-    { name: "dirty", type: "submit" },
-    { name: "submitting", label: "saving..." },
+    { name: "submitting" },
   ],
   [
     { name: "submitting", type: "succeed" },
-    { name: "submitted", label: "saved!" },
+    { name: "submitted" },
   ],
   [
     { name: "submitting", type: "fail" },
-    { name: "failed", label: "failed!" },
+    { name: "failed" },
   ],
   [
-    { name: "submitted", type: "change" },
-    { name: "dirty", label: "save?" },
+    { name: "submitted", type: "submit" },
+    { name: "submitting" },
   ],
   [
-    { name: "failed", type: "change" },
-    { name: "dirty", label: "save?" },
-  ],
-  [
-    { name: "submitted", type: "reset" },
-    { name: "idle", label: "" },
-  ],
-  [
-    { name: "failed", type: "reset" },
-    { name: "idle", label: "" },
+    { name: "failed", type: "submit" },
+    { name: "submitting" },
   ],
 ]);
 
@@ -84,7 +60,7 @@ export const StateContext = createContext<State | null>(null);
 export const StateDispatchContext = createContext<Dispatch<Action> | null>(null);
 
 export function StateProvider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch] = useReducer(stateReducer, { name: "idle", label: "" });
+  const [state, dispatch] = useReducer(stateReducer, { name: "idle" });
 
   return (
     <StateContext.Provider value={state}>
