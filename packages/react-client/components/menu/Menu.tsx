@@ -26,9 +26,9 @@ const Menu = async () => {
     <>
       <DropdownMenuItem>
         <form action={logout} className="w-full">
-          <button type="submit" className="flex justify-center w-full">
+          <button type="submit" className="flex w-full justify-center">
             Log out
-            <DoorOpen className="w-4 h-4 ml-2" />
+            <DoorOpen className="ml-2 h-4 w-4" />
           </button>
         </form>
       </DropdownMenuItem>
@@ -37,10 +37,10 @@ const Menu = async () => {
   );
 
   return (
-    <nav className="fixed flex right-2 top-0 p-4 z-10">
+    <nav className="fixed right-2 top-0 z-10 flex p-4">
       <DropdownMenu>
         <DropdownMenuTrigger>
-          <MoreVertical className="w-6 h-6" />
+          <MoreVertical className="h-6 w-6" />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           {logoutItem}

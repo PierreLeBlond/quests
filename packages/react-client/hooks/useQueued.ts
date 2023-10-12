@@ -17,4 +17,4 @@ export const useQueued = (value: (() => Promise<void>) | null) => {
   }, [value]);
 
   return execute;
-}
+};

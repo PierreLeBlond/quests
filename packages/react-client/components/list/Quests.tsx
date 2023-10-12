@@ -18,28 +18,24 @@ import { ReorderArea } from "./ReorderArea";
 
 type QuestsProps = {
   quests: Quest[];
-}
+};
 
 type QuestField = {
   name: string;
   questId?: string;
-}
+};
 type QuestFieldWithId = QuestField & { id: string };
 
 export function Quests({ props }: { props: QuestsProps }) {
   const { quests } = props;
 
   // Lifted up states
-  const [grabbedId, setGrabbedId] = useState<
-    string | null
-  >(null);
+  const [grabbedId, setGrabbedId] = useState<string | null>(null);
   const [grabbedPosition, setGrabbedPosition] = useState(0);
   const [editMode, setEditMode] = useState<EditMode>("open");
 
   // Global form state
-  const {
-    control,
-  } = useForm<{
+  const { control } = useForm<{
     quests: QuestField[];
   }>({
     defaultValues: {
@@ -63,7 +59,10 @@ export function Quests({ props }: { props: QuestsProps }) {
         if (!field) {
           return false;
         }
-        return quest.name === field.name && (!field.questId || field.questId === quest.id);
+        return (
+          quest.name === field.name &&
+          (!field.questId || field.questId === quest.id)
+        );
       });
       if (match) {
         return;
@@ -71,7 +70,9 @@ export function Quests({ props }: { props: QuestsProps }) {
     }
 
     dispatch({ type: "submit" });
-    const { data, validationError, serverError } = await saveQuests({ quests: fields });
+    const { data, validationError, serverError } = await saveQuests({
+      quests: fields,
+    });
 
     if (validationError || serverError) {
       dispatch({ type: "fail" });
@@ -79,12 +80,12 @@ export function Quests({ props }: { props: QuestsProps }) {
 
     if (data) {
       dispatch({ type: "succeed" });
-      data.forEach(newQuest => {
-        const index = fields.findIndex(field => field.id === newQuest.id);
+      data.forEach((newQuest) => {
+        const index = fields.findIndex((field) => field.id === newQuest.id);
         const field = fields.at(index) as QuestFieldWithId;
         update(index, {
           ...field,
-          questId: newQuest.questId
+          questId: newQuest.questId,
         });
       });
     }
@@ -95,74 +96,119 @@ export function Quests({ props }: { props: QuestsProps }) {
   return (
     <>
       <EditMenu props={{ editMode, setEditMode }} />
-      <div className="flex flex-col pt-32 w-full h-full">
-        <CreateItem props={{
-          editMode, placeholder: "new quest", prepend: (value: string) => prepend({ name: value })
-        }} />
-        <ReorderArea props={{
-          active: editMode === "reorder", setGrabbedPosition, ids: fields.map(({ id }) => id), setGrabbedId, grabbedId, move
-        }} >
-          <ul
-            className="flex flex-col relative w-full"
-          >
+      <div className="flex h-full w-full flex-col pt-32">
+        <CreateItem
+          props={{
+            editMode,
+            placeholder: "new quest",
+            prepend: (value: string) => prepend({ name: value }),
+          }}
+        />
+        <ReorderArea
+          props={{
+            active: editMode === "reorder",
+            setGrabbedPosition,
+            ids: fields.map(({ id }) => id),
+            setGrabbedId,
+            grabbedId,
+            move,
+          }}
+        >
+          <ul className="relative flex w-full flex-col">
             {fields.map(({ id, name, questId }, index) => {
-              const quest = quests.find(currentQuest => currentQuest.id === questId) as Quest;
+              const quest = quests.find(
+                (currentQuest) => currentQuest.id === questId,
+              ) as Quest;
               const steps = quest ? quest.steps : [];
-              const doneSteps = quest ? quest.steps.filter(step => step.done) : [];
-              const done = steps.length > 0 && steps.length === doneSteps.length;
+              const doneSteps = quest
+                ? quest.steps.filter((step) => step.done)
+                : [];
+              const done =
+                steps.length > 0 && steps.length === doneSteps.length;
 
               const item = (
                 <>
-                  {
-                    steps.length > 0 && (
-                      <>
-                        <div className="absolute flex bottom-0 h-0.5 w-full pl-10 pr-10">
-                          <div className="bg-stone-500 h-0.5" style={{ width: `${(doneSteps.length / steps.length) * 100}%` }} />
-                          <div className="bg-stone-500/50 h-0.5" style={{ width: `${(1.0 - doneSteps.length / steps.length) * 100}%` }} />
-                        </div>
-                        <p className="absolute right-10 bottom-0 text-stone-500 text-xs">{doneSteps.length}/{steps.length}</p>
-                      </>
-                    )
-                  }
+                  {steps.length > 0 && (
+                    <>
+                      <div className="absolute bottom-0 flex h-0.5 w-full pl-10 pr-10">
+                        <div
+                          className="h-0.5 bg-stone-500"
+                          style={{
+                            width: `${
+                              (doneSteps.length / steps.length) * 100
+                            }%`,
+                          }}
+                        />
+                        <div
+                          className="h-0.5 bg-stone-500/50"
+                          style={{
+                            width: `${
+                              (1.0 - doneSteps.length / steps.length) * 100
+                            }%`,
+                          }}
+                        />
+                      </div>
+                      <p className="absolute bottom-0 right-10 text-xs text-stone-500">
+                        {doneSteps.length}/{steps.length}
+                      </p>
+                    </>
+                  )}
                   <p className="truncate">{name}</p>
                 </>
-              )
+              );
 
               return (
-                <li key={id} className={`${done && "line-through text-stone-500"} flex items-center w-full`}>
-
+                <li
+                  key={id}
+                  className={`${
+                    done && "text-stone-500 line-through"
+                  } flex w-full items-center`}
+                >
                   {editMode === "open" && (
-                    <Link href={`quest/${questId}`} className={`${!questId && "pointer-events-none text-stone-500"} flex items-center w-full`} scroll={false}>
+                    <Link
+                      href={`quest/${questId}`}
+                      className={`${
+                        !questId && "pointer-events-none text-stone-500"
+                      } flex w-full items-center`}
+                      scroll={false}
+                    >
                       <Item>{item}</Item>
                     </Link>
                   )}
                   {editMode === "reorder" && (
-                    <ReorderItem props={{ grabbed: id === grabbedId, grabbedPosition }}>{item}</ReorderItem>
+                    <ReorderItem
+                      props={{ grabbed: id === grabbedId, grabbedPosition }}
+                    >
+                      {item}
+                    </ReorderItem>
                   )}
                   {editMode === "delete" && (
-                    <DeleteItem props={{
-                      remove: () => {
-                        remove(index);
-                      }
-                    }}>{item}</DeleteItem>
-                  )
-                  }
+                    <DeleteItem
+                      props={{
+                        remove: () => {
+                          remove(index);
+                        },
+                      }}
+                    >
+                      {item}
+                    </DeleteItem>
+                  )}
                   {editMode === "edit" && (
                     <EditItem
                       props={{
                         value: name,
                         update: (value: string) => {
                           update(index, { name: value, questId });
-                        }
+                        },
                       }}
                     />
                   )}
                 </li>
-              )
+              );
             })}
           </ul>
         </ReorderArea>
-      </div >
+      </div>
     </>
   );
 }

@@ -9,10 +9,17 @@ type ReorderAreaProps = {
   setGrabbedId: (grabbedId: string | null) => void;
   grabbedId: string | null;
   move: (from: number, to: number) => void;
-}
+};
 
-export function ReorderArea({ children, props }: { children: React.ReactNode, props: ReorderAreaProps }) {
-  const { active, ids, setGrabbedPosition, setGrabbedId, grabbedId, move } = props;
+export function ReorderArea({
+  children,
+  props,
+}: {
+  children: React.ReactNode;
+  props: ReorderAreaProps;
+}) {
+  const { active, ids, setGrabbedPosition, setGrabbedId, grabbedId, move } =
+    props;
 
   const [scrollStart, setScrollStart] = useState<number>(0);
   const [clientYStart, setclientYStart] = useState<number>(0);
@@ -49,7 +56,10 @@ export function ReorderArea({ children, props }: { children: React.ReactNode, pr
 
     const position = clientY - scrollAreaRef.current.offsetTop;
 
-    if (position < ITEM_HEIGHT * 0.5 || position > scrollAreaRef.current.offsetHeight - ITEM_HEIGHT * 0.5) {
+    if (
+      position < ITEM_HEIGHT * 0.5 ||
+      position > scrollAreaRef.current.offsetHeight - ITEM_HEIGHT * 0.5
+    ) {
       return;
     }
 
@@ -86,13 +96,12 @@ export function ReorderArea({ children, props }: { children: React.ReactNode, pr
 
   const release = () => {
     setGrabbedId(null);
-  }
+  };
 
-  return active
-    ? (<div
-      onPointerDown={
-        (event) =>
-          event.isPrimary ? grab(event.clientY) : startScroll(event.clientY)
+  return active ? (
+    <div
+      onPointerDown={(event) =>
+        event.isPrimary ? grab(event.clientY) : startScroll(event.clientY)
       }
       onPointerMove={(event) =>
         event.isPrimary
@@ -101,8 +110,13 @@ export function ReorderArea({ children, props }: { children: React.ReactNode, pr
       }
       onPointerUp={(event) => event.isPrimary && release()}
       onContextMenu={(event) => event.preventDefault()}
-      className="select-none touch-none w-full overflow-y-auto mb-4"
+      className="mb-4 w-full touch-none select-none overflow-y-auto"
       ref={scrollAreaRef}
-    > {children}</div >)
-    : (<div className="w-full flex overflow-y-auto mb-4">{children}</div>)
+    >
+      {" "}
+      {children}
+    </div>
+  ) : (
+    <div className="mb-4 flex w-full overflow-y-auto">{children}</div>
+  );
 }

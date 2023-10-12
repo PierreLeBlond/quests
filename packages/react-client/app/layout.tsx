@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: "quests",
   applicationName: "Quests",
   description: "todo app to bring with you on your adventures",
-  manifest: "./manifest.json"
+  manifest: "./manifest.json",
 };
 
 export default function RootLayout({
@@ -19,7 +19,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
@@ -32,6 +31,6 @@ export default function RootLayout({
           </ThemeProvider>
         </StateProvider>
       </body>
-    </html >
+    </html>
   );
 }

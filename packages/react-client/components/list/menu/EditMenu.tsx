@@ -6,7 +6,7 @@ import { StateCue } from "./StateCue";
 type EditMenuProps = {
   editMode: EditMode;
   setEditMode: (editMode: EditMode) => void;
-}
+};
 
 export function EditMenu({ props }: { props: EditMenuProps }) {
   const { editMode, setEditMode } = props;
@@ -14,9 +14,7 @@ export function EditMenu({ props }: { props: EditMenuProps }) {
   return (
     <div className="flex justify-center">
       <div className="absolute grid grid-cols-3">
-        <div
-          className="relative col-start-2 row-start-1 p-3 cursor-pointer"
-        >
+        <div className="relative col-start-2 row-start-1 cursor-pointer p-3">
           <StateCue />
         </div>
         <Toggle

@@ -12,7 +12,7 @@ const AuthorizedLayout = async ({
     redirect("/login");
   }
 
-  return <main className="w-full flex justify-center">{children}</main>;
+  return <main className="flex w-full justify-center">{children}</main>;
 };
 
 export default AuthorizedLayout;

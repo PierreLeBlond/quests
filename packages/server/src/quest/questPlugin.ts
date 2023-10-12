@@ -3,22 +3,23 @@ import { authenticated } from "@/src/authenticated";
 import prisma from "@/src/prisma";
 import { Quest, QuestInput } from "@/prisma/generated/typebox";
 
-const reorder = (userId: string, from: number, to: number) => prisma.quest.updateMany({
-  where: {
-    user: {
-      id: userId,
+const reorder = (userId: string, from: number, to: number) =>
+  prisma.quest.updateMany({
+    where: {
+      user: {
+        id: userId,
+      },
+      index: {
+        gt: from,
+        lt: to,
+      },
     },
-    index: {
-      gt: from,
-      lt: to
-    }
-  },
-  data: {
-    index: {
-      increment: from < to ? 1 : -1
-    }
-  }
-})
+    data: {
+      index: {
+        increment: from < to ? 1 : -1,
+      },
+    },
+  });
 
 export const questPlugin = (app: Elysia) =>
   app
@@ -35,8 +36,8 @@ export const questPlugin = (app: Elysia) =>
           include: {
             steps: {
               orderBy: {
-                index: "asc"
-              }
+                index: "asc",
+              },
             },
           },
           orderBy: {
@@ -63,9 +64,9 @@ export const questPlugin = (app: Elysia) =>
           include: {
             steps: {
               orderBy: {
-                index: "asc"
+                index: "asc",
               },
-            }
+            },
           },
         });
 
@@ -78,7 +79,6 @@ export const questPlugin = (app: Elysia) =>
     .post(
       "/quest",
       async ({ session, body: { name, index } }) => {
-
         const { 1: quest } = await prisma.$transaction([
           reorder(session.user.userId, -1, 0),
           prisma.quest.create({
@@ -91,8 +91,8 @@ export const questPlugin = (app: Elysia) =>
                 },
               },
             },
-          })
-        ])
+          }),
+        ]);
 
         return quest;
       },

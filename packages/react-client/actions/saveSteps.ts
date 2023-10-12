@@ -8,12 +8,14 @@ import { z } from "zod";
 
 const schema = z.object({
   questId: z.string(),
-  steps: z.array(z.object({
-    description: z.string().min(1),
-    done: z.boolean(),
-    stepId: z.string().optional(),
-    id: z.string()
-  }))
+  steps: z.array(
+    z.object({
+      description: z.string().min(1),
+      done: z.boolean(),
+      stepId: z.string().optional(),
+      id: z.string(),
+    }),
+  ),
 });
 
 type Data = z.infer<typeof schema>;
@@ -21,7 +23,8 @@ type Data = z.infer<typeof schema>;
 export const saveSteps = safeAction(schema, async (data: Data) => {
   const headers = fetchHeaders();
 
-  const { data: steps, error } = await eden.quest[data.questId].steps.get(headers);
+  const { data: steps, error } =
+    await eden.quest[data.questId].steps.get(headers);
 
   if (!steps) {
     throw new Error(error?.message);
@@ -32,36 +35,36 @@ export const saveSteps = safeAction(schema, async (data: Data) => {
     index,
   }));
 
-  const newSteps = indexedSteps.filter(
-    (step) => step.stepId === undefined,
-  );
+  const newSteps = indexedSteps.filter((step) => step.stepId === undefined);
 
-  const updatedSteps = indexedSteps.filter(
-    (indexedStep) => {
-      const oldStep = steps.find(step => step.id === indexedStep.stepId);
-      if (!oldStep) {
-        return true;
-      }
-      return !oldStep
-        || indexedStep.description !== oldStep.description
-        || indexedStep.done !== oldStep.done
-        || indexedStep.index !== oldStep.index;
+  const updatedSteps = indexedSteps.filter((indexedStep) => {
+    const oldStep = steps.find((step) => step.id === indexedStep.stepId);
+    if (!oldStep) {
+      return true;
     }
-  ) as { description: string, done: boolean, index: number, stepId: string }[];
+    return (
+      !oldStep ||
+      indexedStep.description !== oldStep.description ||
+      indexedStep.done !== oldStep.done ||
+      indexedStep.index !== oldStep.index
+    );
+  }) as { description: string; done: boolean; index: number; stepId: string }[];
   const deletedSteps = steps.filter(
     (step: Step) =>
       !indexedSteps.find((indexedStep) => indexedStep.stepId === step.id),
   );
 
   const createdSteps = await Promise.all(
-    newSteps.map((step) => eden.quest[data.questId].step.post({
-      ...{
-        description: step.description,
-        done: step.done,
-        index: step.index,
-      },
-      ...headers,
-    }))
+    newSteps.map((step) =>
+      eden.quest[data.questId].step.post({
+        ...{
+          description: step.description,
+          done: step.done,
+          index: step.index,
+        },
+        ...headers,
+      }),
+    ),
   );
 
   await Promise.all([
@@ -75,7 +78,9 @@ export const saveSteps = safeAction(schema, async (data: Data) => {
         ...headers,
       }),
     ),
-    ...deletedSteps.map((step) => eden.quest[data.questId].step[step.id].delete(headers)),
+    ...deletedSteps.map((step) =>
+      eden.quest[data.questId].step[step.id].delete(headers),
+    ),
   ]);
 
   revalidatePath("/quest");
@@ -89,7 +94,7 @@ export const saveSteps = safeAction(schema, async (data: Data) => {
     return {
       ...response.data,
       stepId: response.data.id,
-      id: newStep.id
-    }
-  })
+      id: newStep.id,
+    };
+  });
 });

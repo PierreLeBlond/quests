@@ -17,35 +17,35 @@ import { EditItem } from "./item/EditItem";
 
 type StepsProps = {
   quest: Quest;
-}
+};
 
 type StepField = {
   description: string;
   done: boolean;
   stepId?: string;
-}
+};
 
 type StepFieldWithId = StepField & { id: string };
 
 export function Steps({ props }: { props: StepsProps }) {
   const { quest } = props;
 
-  const [grabbedId, setGrabbedId] = useState<
-    string | null
-  >(null);
+  const [grabbedId, setGrabbedId] = useState<string | null>(null);
   const [grabbedPosition, setGrabbedPosition] = useState(0);
 
   const [editMode, setEditMode] = useState<EditMode>("open");
 
   const dispatch = useAppStateDispatch();
 
-  const {
-    control
-  } = useForm<{
+  const { control } = useForm<{
     steps: StepField[];
   }>({
     defaultValues: {
-      steps: quest.steps.map(({ description, done, id }) => ({ description, done, stepId: id })),
+      steps: quest.steps.map(({ description, done, id }) => ({
+        description,
+        done,
+        stepId: id,
+      })),
     },
   });
   const { fields, update, move, remove, prepend } = useFieldArray<{
@@ -63,8 +63,11 @@ export function Steps({ props }: { props: StepsProps }) {
         if (!field) {
           return false;
         }
-        return step.description === field.description
-          && step.done === field.done && (!field.stepId || field.stepId === step.id);
+        return (
+          step.description === field.description &&
+          step.done === field.done &&
+          (!field.stepId || field.stepId === step.id)
+        );
       });
       if (match) {
         return;
@@ -72,7 +75,10 @@ export function Steps({ props }: { props: StepsProps }) {
     }
 
     dispatch({ type: "submit" });
-    const { data, validationError, serverError } = await saveSteps({ steps: fields, questId: quest.id });
+    const { data, validationError, serverError } = await saveSteps({
+      steps: fields,
+      questId: quest.id,
+    });
 
     if (validationError || serverError) {
       dispatch({ type: "fail" });
@@ -80,12 +86,12 @@ export function Steps({ props }: { props: StepsProps }) {
 
     if (data) {
       dispatch({ type: "succeed" });
-      data.forEach(newStep => {
-        const index = fields.findIndex(field => field.id === newStep.id);
+      data.forEach((newStep) => {
+        const index = fields.findIndex((field) => field.id === newStep.id);
         const field = fields.at(index) as StepFieldWithId;
         update(index, {
           ...field,
-          stepId: newStep.stepId
+          stepId: newStep.stepId,
         });
       });
     }
@@ -96,43 +102,76 @@ export function Steps({ props }: { props: StepsProps }) {
   return (
     <>
       <EditMenu props={{ editMode, setEditMode }} />
-      <div className="flex flex-col pt-32 w-full h-full">
-        <p className="text-sm text-stone-500 p-4 font-bold truncate">{quest.name}</p>
-        <CreateItem props={{ editMode, placeholder: "new step", prepend: (value: string) => prepend({ description: value, done: false }) }} />
-        <ReorderArea props={{ active: editMode === "reorder", setGrabbedPosition, ids: fields.map(({ id }) => id), setGrabbedId, grabbedId, move }} >
-          <ul
-            className="flex flex-col relative w-full"
-          >
+      <div className="flex h-full w-full flex-col pt-32">
+        <p className="truncate p-4 text-sm font-bold text-stone-500">
+          {quest.name}
+        </p>
+        <CreateItem
+          props={{
+            editMode,
+            placeholder: "new step",
+            prepend: (value: string) =>
+              prepend({ description: value, done: false }),
+          }}
+        />
+        <ReorderArea
+          props={{
+            active: editMode === "reorder",
+            setGrabbedPosition,
+            ids: fields.map(({ id }) => id),
+            setGrabbedId,
+            grabbedId,
+            move,
+          }}
+        >
+          <ul className="relative flex w-full flex-col">
             {fields.map(({ id, done, description, stepId }, index) => {
-              const item = (
-                <p className="truncate">{description}</p>
+              const item = <p className="truncate">{description}</p>;
+              return (
+                <li
+                  key={id}
+                  className={`${
+                    done && "text-stone-500 line-through"
+                  } flex w-full items-center`}
+                >
+                  {editMode === "open" && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        update(index, { description, done: !done, stepId })
+                      }
+                      className="flex w-full items-center"
+                    >
+                      <Item>{item}</Item>
+                    </button>
+                  )}
+                  {editMode === "reorder" && (
+                    <ReorderItem
+                      props={{ grabbed: id === grabbedId, grabbedPosition }}
+                    >
+                      {item}
+                    </ReorderItem>
+                  )}
+                  {editMode === "delete" && (
+                    <DeleteItem props={{ remove: () => remove(index) }}>
+                      {item}
+                    </DeleteItem>
+                  )}
+                  {editMode === "edit" && (
+                    <EditItem
+                      props={{
+                        value: description,
+                        update: (value: string) =>
+                          update(index, { description: value, done, stepId }),
+                      }}
+                    />
+                  )}
+                </li>
               );
-              return (<li key={id} className={`${done && "line-through text-stone-500"} flex items-center w-full`}>
-                {editMode === "open" && (
-                  <button type="button" onClick={() => update(index, { description, done: !done, stepId })} className="flex items-center w-full">
-                    <Item>{item}</Item>
-                  </button>
-                )}
-                {editMode === "reorder" && (
-                  <ReorderItem props={{ grabbed: id === grabbedId, grabbedPosition }}>{item}</ReorderItem>
-                )}
-                {editMode === "delete" && (
-                  <DeleteItem props={{ remove: () => remove(index) }}>{item}</DeleteItem>
-                )}
-                {editMode === "edit" && (
-                  <EditItem
-                    props={{
-                      value: description,
-                      update: (value: string) => update(index, { description: value, done, stepId })
-                    }}
-                  />
-                )}
-              </li>
-              )
             })}
           </ul>
         </ReorderArea>
-      </div >
+      </div>
     </>
   );
 }

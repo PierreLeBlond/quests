@@ -6,7 +6,7 @@ const STATE_LABEL = new Map([
   ["submitting", "saving..."],
   ["submitted", "saved!"],
   ["failed", "failed..."],
-])
+]);
 
 export function StateCue() {
   const state = useAppState();
@@ -15,22 +15,22 @@ export function StateCue() {
 
   const label = idle ? null : STATE_LABEL.get(state.name);
 
-  useEffect((): () => void => {
+  useEffect((): (() => void) => {
     if (state.name !== "submitted") {
       setIdle(false);
-      return () => { };
+      return () => {};
     }
 
     const timeoutId = window.setTimeout(() => {
       setIdle(true);
-    }, 1000)
+    }, 1000);
 
     return () => window.clearTimeout(timeoutId);
-  }, [state.name])
+  }, [state.name]);
 
   return (
     <>
-      <div className="absolute text-sm text-justify left-4 bottom-8 flex flex-col">
+      <div className="absolute bottom-8 left-4 flex flex-col text-justify text-sm">
         {label}
         {label && (
           <svg
@@ -46,10 +46,7 @@ export function StateCue() {
           </svg>
         )}
       </div>
-      <Flame
-        className={`h-4 w-4 ${label && "text-orange-500"}`}
-      />
+      <Flame className={`h-4 w-4 ${label && "text-orange-500"}`} />
     </>
-
-  )
+  );
 }

@@ -11,7 +11,7 @@ type CreateItemProps = {
   editMode: EditMode | null;
   placeholder: string;
   prepend: (value: string) => void;
-}
+};
 
 export function CreateItem({ props }: { props: CreateItemProps }) {
   const { editMode, placeholder, prepend } = props;
@@ -19,7 +19,7 @@ export function CreateItem({ props }: { props: CreateItemProps }) {
     handleSubmit,
     formState: { isDirty },
     register,
-    reset
+    reset,
   } = useForm<FormValues>({
     defaultValues: {
       value: "",
@@ -29,36 +29,28 @@ export function CreateItem({ props }: { props: CreateItemProps }) {
   const submit = ({ value }: FormValues) => {
     reset();
     prepend(value);
-  }
+  };
 
   return (
-    <div className="flex items-center pb-4 w-full">
-      {
-        editMode === "open" && (
-          <BookMarked className="m-3 h-4 w-4 text-stone-500" />
-        )
-      }
-      {
-        editMode === "reorder" && (
-          <Grip className="m-3 h-4 w-4 text-stone-500" />
-        )
-      }
-      {
-        editMode === "delete" && (
-          <Swords className="m-3 h-4 w-4 text-stone-500" />
-        )
-      }
-      {
-        editMode === "edit" && (
-          <Settings className="m-3 h-4 w-4 text-stone-500" />
-        )
-      }
+    <div className="flex w-full items-center pb-4">
+      {editMode === "open" && (
+        <BookMarked className="m-3 h-4 w-4 text-stone-500" />
+      )}
+      {editMode === "reorder" && (
+        <Grip className="m-3 h-4 w-4 text-stone-500" />
+      )}
+      {editMode === "delete" && (
+        <Swords className="m-3 h-4 w-4 text-stone-500" />
+      )}
+      {editMode === "edit" && (
+        <Settings className="m-3 h-4 w-4 text-stone-500" />
+      )}
       <form onSubmit={handleSubmit(submit)} className="flex w-full">
         <Input placeholder={placeholder || "new item"} {...register("value")} />
         <button type="submit">
           <Plus className={`m-3 h-4 w-4 ${isDirty || "text-stone-500"}`} />
         </button>
       </form>
-    </div >
+    </div>
   );
 }

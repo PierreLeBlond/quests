@@ -21,10 +21,10 @@ function LoginPage() {
   };
 
   return (
-    <div className="w-full h-full flex items-center justify-center">
+    <div className="flex h-full w-full items-center justify-center">
       <form action={connect}>
         <Button>
-          <Github className="h-4 w-4 mr-2" />
+          <Github className="mr-2 h-4 w-4" />
           Connect with github
         </Button>
       </form>

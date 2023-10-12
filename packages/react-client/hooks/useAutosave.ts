@@ -13,4 +13,4 @@ export const useAutosave = (save: () => Promise<void>, active: boolean) => {
       saving.current = false;
     });
   }, [save, active]); // eslint-disable-line
-}
+};

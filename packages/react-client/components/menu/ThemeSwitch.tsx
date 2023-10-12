@@ -19,11 +19,11 @@ export function ThemeSwitch() {
   const item =
     theme === "light" ? (
       <>
-        Light <Sun className="w-4 h-4 ml-2" />
+        Light <Sun className="ml-2 h-4 w-4" />
       </>
     ) : (
       <>
-        Dark <Moon className="w-4 h-4 ml-2" />
+        Dark <Moon className="ml-2 h-4 w-4" />
       </>
     );
 

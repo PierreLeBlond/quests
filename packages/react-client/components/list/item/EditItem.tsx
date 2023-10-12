@@ -9,14 +9,11 @@ type FormValues = {
 type EditItemProps = {
   value: string;
   update: (value: string) => void;
-}
+};
 
 export function EditItem({ props }: { props: EditItemProps }) {
   const { value, update } = props;
-  const {
-    handleSubmit,
-    register
-  } = useForm<FormValues>({
+  const { handleSubmit, register } = useForm<FormValues>({
     defaultValues: {
       value,
     },
@@ -27,11 +24,11 @@ export function EditItem({ props }: { props: EditItemProps }) {
   };
 
   return (
-    <form onSubmit={handleSubmit(submit)} className="w-full flex items-center">
+    <form onSubmit={handleSubmit(submit)} className="flex w-full items-center">
       <Settings className="m-3 h-4 w-4" />
       <Input
         {...register("value", {
-          onBlur: ({ target }) => submit({ value: target.value })
+          onBlur: ({ target }) => submit({ value: target.value }),
         })}
         className="mr-4"
       />

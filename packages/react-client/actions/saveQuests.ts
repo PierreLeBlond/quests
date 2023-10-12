@@ -7,11 +7,13 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 const schema = z.object({
-  quests: z.array(z.object({
-    name: z.string().min(1),
-    questId: z.string().optional(),
-    id: z.string()
-  }))
+  quests: z.array(
+    z.object({
+      name: z.string().min(1),
+      questId: z.string().optional(),
+      id: z.string(),
+    }),
+  ),
 });
 
 type Data = z.infer<typeof schema>;
@@ -34,30 +36,32 @@ export const saveQuests = safeAction(schema, async (data: Data) => {
     (quest) => quest.questId === undefined,
   );
 
-  const updatedQuests = indexedQuests.filter(
-    (indexedQuest) => {
-      const oldQuest = quests.find(quest => quest.id === indexedQuest.questId);
-      if (!oldQuest) {
-        return true;
-      }
-      return !oldQuest
-        || indexedQuest.name !== oldQuest.name
-        || indexedQuest.index !== oldQuest.index;
+  const updatedQuests = indexedQuests.filter((indexedQuest) => {
+    const oldQuest = quests.find((quest) => quest.id === indexedQuest.questId);
+    if (!oldQuest) {
+      return true;
     }
-  ) as { name: string; index: number; questId: string }[];;
+    return (
+      !oldQuest ||
+      indexedQuest.name !== oldQuest.name ||
+      indexedQuest.index !== oldQuest.index
+    );
+  }) as { name: string; index: number; questId: string }[];
   const deletedQuests = quests.filter(
     (quest: Quest) =>
       !indexedQuests.find((indexedQuest) => indexedQuest.questId === quest.id),
   );
 
   const createdQuests = await Promise.all(
-    newQuests.map((quest) => eden.quest.post({
-      ...{
-        name: quest.name,
-        index: quest.index,
-      },
-      ...headers,
-    }))
+    newQuests.map((quest) =>
+      eden.quest.post({
+        ...{
+          name: quest.name,
+          index: quest.index,
+        },
+        ...headers,
+      }),
+    ),
   );
 
   await Promise.all([
@@ -83,7 +87,7 @@ export const saveQuests = safeAction(schema, async (data: Data) => {
     return {
       ...response.data,
       questId: response.data.id,
-      id: newQuest.id
-    }
-  })
+      id: newQuest.id,
+    };
+  });
 });
