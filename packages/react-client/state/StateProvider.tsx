@@ -6,7 +6,7 @@ type StateName = "idle" | "submitting" | "submitted" | "failed";
 type State = {
   name: StateName;
 };
-type ActionType = "submit" | "succeed" | "fail";
+type ActionType = "submit" | "succeed" | "fail" | "reset";
 type Action = {
   type: ActionType;
 };
@@ -17,6 +17,8 @@ const stateReducerMap = new Map<{ name: StateName; type: ActionType }, State>([
   [{ name: "submitting", type: "fail" }, { name: "failed" }],
   [{ name: "submitted", type: "submit" }, { name: "submitting" }],
   [{ name: "failed", type: "submit" }, { name: "submitting" }],
+  [{ name: "submitted", type: "reset" }, { name: "idle" }],
+  [{ name: "failed", type: "reset" }, { name: "idle" }],
 ]);
 
 export const stateReducer = (state: State, action: Action) => {

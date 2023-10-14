@@ -1,4 +1,4 @@
-import { useAppState } from "@/state/StateProvider";
+import { useAppState, useAppStateDispatch } from "@/state/StateProvider";
 import { Flame } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -10,6 +10,7 @@ const STATE_LABEL = new Map([
 
 export function StateCue() {
   const state = useAppState();
+  const dispatch = useAppStateDispatch();
 
   const [idle, setIdle] = useState(false);
 
@@ -23,10 +24,11 @@ export function StateCue() {
 
     const timeoutId = window.setTimeout(() => {
       setIdle(true);
+      dispatch({ type: "reset" });
     }, 1000);
 
     return () => window.clearTimeout(timeoutId);
-  }, [state.name]);
+  }, [state.name, dispatch]);
 
   return (
     <>

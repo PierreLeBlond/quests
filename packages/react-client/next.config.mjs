@@ -4,7 +4,7 @@ const withPWA = pwa({
   dest: "public",
 });
 
-const nextConfig = withPWA({
+const nextConfig = {
   experimental: {
     serverActions: true,
   },
@@ -14,6 +14,6 @@ const nextConfig = withPWA({
   eslint: {
     ignoreDuringBuilds: true,
   },
-});
+};
 
 export default nextConfig;
