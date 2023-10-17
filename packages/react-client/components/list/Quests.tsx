@@ -5,7 +5,7 @@ import { Quest } from "@/types/Quest";
 import { useFieldArray, useForm } from "react-hook-form";
 import Link from "next/link";
 import { useAutosave } from "@/hooks/useAutosave";
-import { saveQuests } from "@/actions/saveQuests";
+import type { saveQuests } from "@/actions/saveQuests";
 import { useAppStateDispatch } from "@/state/StateProvider";
 import { Item } from "./item/Item";
 import { EditMode } from "./editMode";
@@ -18,6 +18,7 @@ import { ReorderArea } from "./ReorderArea";
 
 type QuestsProps = {
   quests: Quest[];
+  saveAction: typeof saveQuests;
 };
 
 type QuestField = {
@@ -27,7 +28,7 @@ type QuestField = {
 type QuestFieldWithId = QuestField & { id: string };
 
 export function Quests({ props }: { props: QuestsProps }) {
-  const { quests } = props;
+  const { quests, saveAction } = props;
 
   // Lifted up states
   const [grabbedId, setGrabbedId] = useState<string | null>(null);
@@ -70,7 +71,7 @@ export function Quests({ props }: { props: QuestsProps }) {
     }
 
     dispatch({ type: "submit" });
-    const { data, validationError, serverError } = await saveQuests({
+    const { data, validationError, serverError } = await saveAction({
       quests: fields,
     });
 
@@ -89,7 +90,7 @@ export function Quests({ props }: { props: QuestsProps }) {
         });
       });
     }
-  }, [quests, fields, dispatch, update]);
+  }, [quests, fields, dispatch, update, saveAction]);
 
   useAutosave(save, grabbedId === null);
 

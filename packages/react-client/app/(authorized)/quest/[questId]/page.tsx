@@ -1,3 +1,4 @@
+import { saveSteps } from "@/actions/saveSteps";
 import { Steps } from "@/components/list/Steps";
 import { eden, fetchHeaders } from "@/lib/eden";
 import { ArrowLeft } from "lucide-react";
@@ -21,7 +22,7 @@ const StepsPage = async ({ params }: { params: { questId: string } }) => {
         <ArrowLeft className="h-8 w-8" />
       </Link>
       <main className="relative flex w-full flex-col items-center pt-10">
-        <Steps props={{ quest: data }} />
+        <Steps props={{ quest: data, saveAction: saveSteps }} />
       </main>
     </>
   );

@@ -3,7 +3,7 @@
 import { useCallback, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useAppStateDispatch } from "@/state/StateProvider";
-import { saveSteps } from "@/actions/saveSteps";
+import type { saveSteps } from "@/actions/saveSteps";
 import { Quest } from "@/types/Quest";
 import { useAutosave } from "@/hooks/useAutosave";
 import { EditMode } from "./editMode";
@@ -17,6 +17,7 @@ import { EditItem } from "./item/EditItem";
 
 type StepsProps = {
   quest: Quest;
+  saveAction: typeof saveSteps;
 };
 
 type StepField = {
@@ -28,7 +29,7 @@ type StepField = {
 type StepFieldWithId = StepField & { id: string };
 
 export function Steps({ props }: { props: StepsProps }) {
-  const { quest } = props;
+  const { quest, saveAction } = props;
 
   const [grabbedId, setGrabbedId] = useState<string | null>(null);
   const [grabbedPosition, setGrabbedPosition] = useState(0);
@@ -75,7 +76,7 @@ export function Steps({ props }: { props: StepsProps }) {
     }
 
     dispatch({ type: "submit" });
-    const { data, validationError, serverError } = await saveSteps({
+    const { data, validationError, serverError } = await saveAction({
       steps: fields,
       questId: quest.id,
     });
@@ -95,7 +96,7 @@ export function Steps({ props }: { props: StepsProps }) {
         });
       });
     }
-  }, [quest, fields, dispatch, update]);
+  }, [quest, fields, dispatch, update, saveAction]);
 
   useAutosave(save, grabbedId === null);
 
