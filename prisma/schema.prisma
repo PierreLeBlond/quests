@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @unique
+
+  auth_session Session[]
+  key          Key[]
+  quests       Quest[]
+
+  github_username String @unique
+}
+
+model Session {
+  id             String @id @unique
+  user_id        String
+  active_expires BigInt
+  idle_expires   BigInt
+  user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+}
+
+model Key {
+  id              String  @id @unique
+  hashed_password String?
+  user_id         String
+  user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
+}
+
+model Quest {
+  id       String  @id @default(uuid())
+  name     String
+  archived Boolean @default(false)
+
+  user_id String
+  user    User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  index Int
+
+  steps Step[]
+}
+
+model Step {
+  id          String  @id @default(uuid())
+  description String
+  done        Boolean @default(false)
+
+  index Int
+
+  quest_id String
+  quest    Quest  @relation(references: [id], fields: [quest_id], onDelete: Cascade)
+}
