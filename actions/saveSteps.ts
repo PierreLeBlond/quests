@@ -33,6 +33,7 @@ export const saveSteps = safeAction(schema, async (data: Data) => {
     where: {
       quest: {
         id: data.questId,
+        user_id: user.userId,
       },
     },
   });
