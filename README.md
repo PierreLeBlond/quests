@@ -4,8 +4,6 @@ A minimalist todo app as a list of quest, composed by steps.
 
 ## dev
 
-### server
-
 ### Prisma
 
 Add into `.env.local` your development `DATABASE_URL` environment variable pointing to a `psql` database.
@@ -17,7 +15,7 @@ run :
 `npx prisma generate`
 `npx prisma db push`
 
-#### Github OAuth
+### Github OAuth
 
 Add into `.env.local` your development `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`. See https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app
 
