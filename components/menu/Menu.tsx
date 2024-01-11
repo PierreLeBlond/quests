@@ -1,4 +1,4 @@
-import { DoorOpen, MoreVertical } from "lucide-react";
+import { DoorOpen, Key, MoreVertical } from "lucide-react";
 import { redirect } from "next/navigation";
 import * as context from "next/headers";
 import {
@@ -36,11 +36,26 @@ const Menu = async () => {
     <>
       <DropdownMenuItem>
         <form action={logout} className="w-full">
-          <button type="submit" className="flex w-full justify-center">
+          <button
+            type="submit"
+            className="flex w-full items-center justify-center"
+          >
             Log out
             <DoorOpen className="ml-2 h-4 w-4" />
           </button>
         </form>
+      </DropdownMenuItem>
+      <DropdownMenuSeparator />
+    </>
+  );
+
+  const loginItem = !user && (
+    <>
+      <DropdownMenuItem>
+        <a className="flex w-full items-center justify-center" href="/login">
+          Log in
+          <Key className="ml-2 h-4 w-4" />
+        </a>
       </DropdownMenuItem>
       <DropdownMenuSeparator />
     </>
@@ -54,6 +69,7 @@ const Menu = async () => {
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           {logoutItem}
+          {loginItem}
           <DropdownMenuItem>
             <ThemeSwitch />
           </DropdownMenuItem>

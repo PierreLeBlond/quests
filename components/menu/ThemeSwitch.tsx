@@ -17,14 +17,14 @@ export function ThemeSwitch() {
   };
 
   const item =
-    theme === "light" ? (
-      <>
+    theme === "dark" ? (
+      <div className="flex items-center">
         Light <Sun className="ml-2 h-4 w-4" />
-      </>
+      </div>
     ) : (
-      <>
+      <div className="flex items-center">
         Dark <Moon className="ml-2 h-4 w-4" />
-      </>
+      </div>
     );
 
   return (

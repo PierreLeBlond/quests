@@ -10,4 +10,6 @@ export interface Quest {
 export interface QuestInput {
   index: number;
   name: string;
+  id?: string;
+  steps: Step[];
 }

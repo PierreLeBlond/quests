@@ -1,41 +1,23 @@
 "use server";
 
-import * as context from "next/headers";
-import { redirect } from "next/navigation";
-import { Quests } from "@/components/list/Quests";
+import { Quests } from "@/components/quests/Quests";
 import { saveQuests } from "@/actions/saveQuests";
-import { auth } from "@/lucia/lucia";
-import prisma from "@/prisma/prisma";
+import { getQuests } from "@/lib/getQuests";
+import { getUser } from "@/lib/getUser";
+import { LocalQuests } from "@/components/quests/LocalQuests";
 
 const QuestsPage = async () => {
-  const authRequest = auth.handleRequest("GET", context);
-  const session = await authRequest.validate();
-  if (!session) {
-    redirect("/login");
-  }
-  const quests = await prisma.quest.findMany({
-    where: {
-      user: {
-        id: session.user.userId,
-      },
-    },
-    include: {
-      steps: {
-        orderBy: {
-          index: "asc",
-        },
-      },
-    },
-    orderBy: {
-      index: "asc",
-    },
-  });
+  const user = await getUser();
+  const quests = await getQuests();
 
   return (
     <>
       <h1 className="fixed left-0 top-0 p-2 text-3xl font-bold">Quests</h1>
+      <h2 className="fixed left-0 top-8 p-2 text-xs text-stone-500">
+        {user ? user.githubUsername : "Local"}
+      </h2>
       <main className="relative flex w-full flex-col items-center pt-10">
-        <Quests props={{ quests, saveAction: saveQuests }} />
+        {!quests ? <LocalQuests /> : <Quests props={{ quests, saveQuests }} />}
       </main>
     </>
   );

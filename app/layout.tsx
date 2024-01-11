@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Menu from "@/components/menu/Menu";
 import { StateProvider } from "@/state/StateProvider";
+import { LocalQuestsProvider } from "@/components/LocalQuestsProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,14 +23,16 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <StateProvider>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <Menu />
-            <main className="relative flex h-screen w-screen overflow-hidden">
-              {children}
-            </main>
-          </ThemeProvider>
-        </StateProvider>
+        <LocalQuestsProvider>
+          <StateProvider>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              <Menu />
+              <main className="relative flex h-screen w-screen justify-center overflow-hidden">
+                {children}
+              </main>
+            </ThemeProvider>
+          </StateProvider>
+        </LocalQuestsProvider>
       </body>
     </html>
   );
