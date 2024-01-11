@@ -89,7 +89,7 @@ export function Steps({ props }: { props: StepsProps }) {
     const currentFields = fields.slice(0);
 
     dispatch({ type: "submit" });
-    const { data, validationError, serverError } = await saveSteps({
+    const { data, validationErrors, serverError } = await saveSteps({
       ...quest,
       steps: fields.map((step, index) => ({
         description: step.description,
@@ -99,7 +99,7 @@ export function Steps({ props }: { props: StepsProps }) {
       })),
     });
 
-    if (validationError || serverError) {
+    if (validationErrors || serverError) {
       dispatch({ type: "fail" });
       return;
     }

@@ -88,7 +88,7 @@ export function Quests({ props }: { props: QuestsProps }) {
 
     dispatch({ type: "submit" });
     setSaving(true);
-    const { data, validationError, serverError } = await saveQuests(
+    const { data, validationErrors, serverError } = await saveQuests(
       fields.map((field, index) => ({
         name: field.name,
         index,
@@ -97,7 +97,7 @@ export function Quests({ props }: { props: QuestsProps }) {
       })),
     );
 
-    if (validationError || serverError) {
+    if (validationErrors || serverError) {
       dispatch({ type: "fail" });
       return;
     }
