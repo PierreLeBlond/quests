@@ -155,7 +155,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/pierre/Documents/projects/quests/prisma/generated/client",
+      "value": "/home/pierre/quests/code/quests/prisma/generated/client",
       "fromEnvVar": null
     },
     "config": {

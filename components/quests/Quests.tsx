@@ -163,31 +163,17 @@ export function Quests({ props }: { props: QuestsProps }) {
 
               const item = (
                 <>
-                  {steps.length > 0 && (
-                    <>
-                      <div className="absolute bottom-0 flex h-0.5 w-full pl-10 pr-10">
-                        <div
-                          className="h-0.5 bg-stone-500"
-                          style={{
-                            width: `${
-                              (doneSteps.length / steps.length) * 100
-                            }%`,
-                          }}
-                        />
-                        <div
-                          className="h-0.5 bg-stone-500/50"
-                          style={{
-                            width: `${
-                              (1.0 - doneSteps.length / steps.length) * 100
-                            }%`,
-                          }}
-                        />
-                      </div>
-                      <p className="absolute bottom-0 right-10 text-xs text-stone-500">
-                        {doneSteps.length}/{steps.length}
-                      </p>
-                    </>
-                  )}
+                  <div className="absolute bottom-0 flex h-2 w-full gap-2 pl-10 pr-10">
+                    {steps.map((step) => (
+                      <div
+                        className={`h-2 w-2 rounded-full ${
+                          step.done
+                            ? "bg-stone-500"
+                            : "bg-stone-900 dark:bg-stone-100"
+                        }`}
+                      ></div>
+                    ))}
+                  </div>
                   <p className="truncate">{name}</p>
                 </>
               );
