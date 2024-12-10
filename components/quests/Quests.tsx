@@ -171,7 +171,7 @@ export function Quests({ props }: { props: QuestsProps }) {
                             ? "bg-stone-500"
                             : "bg-stone-900 dark:bg-stone-100"
                         }`}
-                      ></div>
+                      />
                     ))}
                   </div>
                   <p className="truncate">{name}</p>
