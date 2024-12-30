@@ -5,6 +5,7 @@ import { useLocalQuests } from "@/components/LocalQuestsProvider";
 import { saveLocalQuests } from "@/lib/local/saveLocalQuests";
 import { getLocalQuests } from "@/lib/local/getLocalQuests";
 import { Steps } from "./Steps";
+import { StepInput } from "@/types/Step";
 
 type LocalStepProps = {
   questId: string;
@@ -23,15 +24,17 @@ export function LocalSteps({ props }: { props: LocalStepProps }) {
           quest: localQuest,
           saveSteps: async (questInput) => {
             // Generate ids for new steps
-            const steps = questInput.steps.map((step, index) => {
-              const id = step.id || uuidv4();
-              return {
-                description: step.description,
-                done: step.done,
-                index,
-                id,
-              };
-            });
+            const steps = questInput.steps.map(
+              (step: StepInput, index: number) => {
+                const id = step.id || uuidv4();
+                return {
+                  description: step.description,
+                  done: step.done,
+                  index,
+                  id,
+                };
+              },
+            );
 
             const quest = {
               ...questInput,
