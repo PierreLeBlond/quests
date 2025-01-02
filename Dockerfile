@@ -13,6 +13,10 @@ WORKDIR /app
 ENV NODE_ENV="production"
 ENV PUBLIC_BASE_URL="https://quests.pierrelespingal.com"
 
+# Install pnpm
+ARG PNPM_VERSION=9.15.2
+RUN npm install -g pnpm@$PNPM_VERSION
+
 # Throw-away build stage to reduce size of final image
 FROM base as build
 
@@ -21,8 +25,8 @@ RUN apt-get update -qq && \
     apt-get install -y build-essential openssl pkg-config python-is-python3
 
 # Install node modules
-COPY --link package.json ./
-RUN npm install --include=dev
+COPY --link package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile --prod=false
 
 # Generate Prisma Client
 COPY --link prisma ./prisma/
@@ -32,10 +36,10 @@ RUN npx prisma generate
 COPY --link . .
 
 # Build application
-RUN npm run build
+RUN pnpm run build
 
 # Remove development dependencies
-RUN npm prune --omit=dev
+RUN pnpm prune --prod
 
 
 # Final stage for app image
@@ -52,4 +56,4 @@ COPY --from=build /app /app
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-CMD [ "npm", "run", "start" ]
+CMD [ "pnpm", "run", "start" ]
