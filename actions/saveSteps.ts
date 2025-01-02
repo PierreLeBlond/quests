@@ -7,13 +7,10 @@ import { getUserQuest } from "@/lib/user/getUserQuest";
 import prisma from "@/prisma/prisma";
 import { Step } from "@/types/Step";
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
 
-type Data = z.infer<typeof questInputSchema>;
-
-export const saveSteps = safeAction(
-  questInputSchema,
-  async (questInput: Data) => {
+export const saveSteps = safeAction
+  .schema(questInputSchema)
+  .action(async ({ parsedInput: questInput }) => {
     const user = await getUser();
 
     if (!user) {
@@ -24,7 +21,7 @@ export const saveSteps = safeAction(
       where: {
         quest: {
           id: questInput.id,
-          user_id: user.userId,
+          user_id: user.id,
         },
       },
     });
@@ -93,5 +90,6 @@ export const saveSteps = safeAction(
     revalidatePath("/");
 
     return getUserQuest(user, questInput.id);
-  },
-);
+  });
+
+export type SaveStepsAction = typeof saveSteps;

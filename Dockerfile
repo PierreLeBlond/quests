@@ -11,7 +11,7 @@ WORKDIR /app
 
 # Set production environment
 ENV NODE_ENV="production"
-
+ENV PUBLIC_BASE_URL="https://quests.pierrelespingal.com"
 
 # Throw-away build stage to reduce size of final image
 FROM base as build
@@ -44,7 +44,8 @@ FROM base
 # Install packages needed for deployment
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y openssl && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives && \
+    npm install -g prisma
 
 # Copy built application
 COPY --from=build /app /app

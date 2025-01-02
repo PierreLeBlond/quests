@@ -1,10 +1,10 @@
 import prisma from "@/prisma/prisma";
 
-export const getUserQuests = async (user: { userId: string }) =>
+export const getUserQuests = async (user: { id: string }) =>
   prisma.quest.findMany({
     where: {
       user: {
-        id: user.userId,
+        id: user.id,
       },
     },
     include: {

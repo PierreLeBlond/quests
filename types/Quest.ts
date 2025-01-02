@@ -1,4 +1,4 @@
-import { Step } from "./Step";
+import { Step, StepInput } from "./Step";
 
 export interface Quest {
   id: string;
@@ -11,5 +11,5 @@ export interface QuestInput {
   index: number;
   name: string;
   id?: string;
-  steps: Step[];
+  steps: StepInput[];
 }

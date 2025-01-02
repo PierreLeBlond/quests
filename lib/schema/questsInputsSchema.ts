@@ -10,7 +10,7 @@ export const questsInputsSchema = z.array(
         description: z.string().min(1),
         index: z.number().min(0),
         done: z.boolean(),
-        id: z.string(),
+        id: z.string().optional(),
       }),
     ),
   }),

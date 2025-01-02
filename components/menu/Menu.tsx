@@ -17,14 +17,22 @@ const Menu = async () => {
   const logout = async () => {
     "use server";
 
-    const authRequest = auth.handleRequest("GET", context);
-    // check if user is authenticated
-    const session = await authRequest.validate();
+    const sessionId = auth.readSessionCookie("auth_session=abc");
+    const { session } = sessionId
+      ? await auth.validateSession(sessionId)
+      : { session: null };
     if (session) {
       // make sure to invalidate the current session!
-      await auth.invalidateSession(session.sessionId);
+      await auth.invalidateSession(session.id);
       // delete session cookie
-      authRequest.setSession(null);
+      const sessionCookie = auth.createBlankSessionCookie();
+
+      const cookies = await context.cookies();
+      cookies.set(
+        sessionCookie.name,
+        sessionCookie.value,
+        sessionCookie.attributes,
+      );
     }
 
     redirect("/login");

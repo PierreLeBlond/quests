@@ -1,25 +1,40 @@
-import { lucia } from "lucia";
-import { prisma } from "@lucia-auth/adapter-prisma";
-
-import { github } from "@lucia-auth/oauth/providers";
+import { Lucia } from "lucia";
+import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
 import client from "@/prisma/prisma";
-import { nextjs_future } from "lucia/middleware";
+import { GitHub } from "arctic";
 
-export const auth = lucia({
-  env: process.env.NODE_ENV === "development" ? "DEV" : "PROD",
-  adapter: prisma(client),
-  middleware: nextjs_future(),
-  getUserAttributes: (data) => ({
-    githubUsername: data.github_username,
+export const auth = new Lucia(new PrismaAdapter(client.session, client.user), {
+  getUserAttributes: (attributes) => ({
+    githubId: attributes.id,
+    username: attributes.github_username,
   }),
   sessionCookie: {
     expires: false,
+    attributes: {
+      secure: process.env.NODE_ENV === "production", // replaces `env` config
+    },
   },
 });
 
-export const githubAuth = github(auth, {
-  clientId: process.env.GITHUB_CLIENT_ID ?? "",
-  clientSecret: process.env.GITHUB_CLIENT_SECRET ?? "",
-});
+declare module "lucia" {
+  interface Register {
+    Lucia: typeof auth;
+    DatabaseUserAttributes: DatabaseUserAttributes;
+  }
+}
+
+interface DatabaseUserAttributes {
+  id: string;
+  github_username: string;
+}
+
+const clientId = process.env.GITHUB_CLIENT_ID || "";
+const clientSecret = process.env.GITHUB_CLIENT_SECRET || "";
+
+export const githubAuth = new GitHub(
+  clientId,
+  clientSecret,
+  `${process.env.PUBLIC_BASE_URL}/login/github/verification`,
+);
 
 export type Auth = typeof auth;

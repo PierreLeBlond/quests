@@ -17,11 +17,11 @@ exports.$Enums = {}
 
 /**
  * Prisma Client JS version: 5.8.0
- * Query Engine version: 605197351a3c8bdd595af2d2a9bc3025bca48ea2
+ * Query Engine version: 11f085a2012c0f4778414c8db2651556ee0ef959
  */
 Prisma.prismaVersion = {
   client: "5.8.0",
-  engine: "605197351a3c8bdd595af2d2a9bc3025bca48ea2"
+  engine: "11f085a2012c0f4778414c8db2651556ee0ef959"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -114,15 +114,8 @@ exports.Prisma.UserScalarFieldEnum = {
 
 exports.Prisma.SessionScalarFieldEnum = {
   id: 'id',
-  user_id: 'user_id',
-  active_expires: 'active_expires',
-  idle_expires: 'idle_expires'
-};
-
-exports.Prisma.KeyScalarFieldEnum = {
-  id: 'id',
-  hashed_password: 'hashed_password',
-  user_id: 'user_id'
+  userId: 'userId',
+  expiresAt: 'expiresAt'
 };
 
 exports.Prisma.QuestScalarFieldEnum = {
@@ -151,16 +144,10 @@ exports.Prisma.QueryMode = {
   insensitive: 'insensitive'
 };
 
-exports.Prisma.NullsOrder = {
-  first: 'first',
-  last: 'last'
-};
-
 
 exports.Prisma.ModelName = {
   User: 'User',
   Session: 'Session',
-  Key: 'Key',
   Quest: 'Quest',
   Step: 'Step'
 };

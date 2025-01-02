@@ -2,10 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { SafeAction } from "next-safe-action";
 import { useAppStateDispatch } from "@/state/StateProvider";
 import { Quest } from "@/types/Quest";
-import { questInputSchema } from "@/lib/schema/questInputSchema";
 import { EditMode } from "./editMode";
 import { ReorderArea } from "./ReorderArea";
 import { EditMenu } from "./menu/EditMenu";
@@ -14,10 +12,12 @@ import { Item } from "./item/Item";
 import { ReorderItem } from "./item/ReorderItem";
 import { DeleteItem } from "./item/DeleteItem";
 import { EditItem } from "./item/EditItem";
+import { Step } from "@/types/Step";
+import { type SaveStepsAction } from "@/actions/saveSteps";
 
 type StepsProps = {
   quest: Quest;
-  saveSteps: SafeAction<typeof questInputSchema, Quest>;
+  saveSteps: SaveStepsAction;
 };
 
 type StepField = {
@@ -29,8 +29,6 @@ type StepField = {
 type StepFieldWithId = StepField & { id: string };
 
 export function Steps({ props }: { props: StepsProps }) {
-  const { saveSteps } = props;
-
   // Lifted up states
   const [grabbedId, setGrabbedId] = useState<string | null>(null);
   const [grabbedPosition, setGrabbedPosition] = useState(0);
@@ -88,8 +86,9 @@ export function Steps({ props }: { props: StepsProps }) {
     // Let's keep a copy of the current fields to properly match new ids latter
     const currentFields = fields.slice(0);
 
+    setSaving(true);
     dispatch({ type: "submit" });
-    const { data, validationErrors, serverError } = await saveSteps({
+    const response = await props.saveSteps({
       ...quest,
       steps: fields.map((step, index) => ({
         description: step.description,
@@ -99,7 +98,12 @@ export function Steps({ props }: { props: StepsProps }) {
       })),
     });
 
-    if (validationErrors || serverError) {
+    if (
+      !response ||
+      !response.data ||
+      response.validationErrors ||
+      response.serverError
+    ) {
       dispatch({ type: "fail" });
       return;
     }
@@ -107,13 +111,9 @@ export function Steps({ props }: { props: StepsProps }) {
     dispatch({ type: "succeed" });
     setSaving(false);
 
-    if (!data) {
-      return;
-    }
+    setQuest(response.data);
 
-    setQuest(data);
-
-    data.steps.forEach((step, index) => {
+    response.data.steps.forEach((step: Step, index: number) => {
       const oldField = currentFields.at(index) as StepFieldWithId;
       const field = fields.find(
         ({ id }) => id === oldField.id,

@@ -1,9 +1,17 @@
-import * as context from "next/headers";
 import { auth } from "@/lucia/lucia";
+import * as context from "next/headers";
 
 export const getUser = async () => {
-  const authRequest = auth.handleRequest("GET", context);
-  const session = await authRequest.validate();
+  const cookies = await context.cookies();
+  const sessionId = cookies.get(auth.sessionCookieName)?.value;
 
-  return session?.user;
+  if (!sessionId) {
+    return null;
+  }
+
+  const { user } = sessionId
+    ? await auth.validateSession(sessionId)
+    : { user: null };
+
+  return user;
 };

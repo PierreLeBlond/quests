@@ -24,11 +24,6 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  */
 export type Session = $Result.DefaultSelection<Prisma.$SessionPayload>
 /**
- * Model Key
- * 
- */
-export type Key = $Result.DefaultSelection<Prisma.$KeyPayload>
-/**
  * Model Quest
  * 
  */
@@ -182,16 +177,6 @@ export class PrismaClient<
   get session(): Prisma.SessionDelegate<ExtArgs>;
 
   /**
-   * `prisma.key`: Exposes CRUD operations for the **Key** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Keys
-    * const keys = await prisma.key.findMany()
-    * ```
-    */
-  get key(): Prisma.KeyDelegate<ExtArgs>;
-
-  /**
    * `prisma.quest`: Exposes CRUD operations for the **Quest** model.
     * Example usage:
     * ```ts
@@ -268,7 +253,7 @@ export namespace Prisma {
 
   /**
    * Prisma Client JS version: 5.8.0
-   * Query Engine version: 605197351a3c8bdd595af2d2a9bc3025bca48ea2
+   * Query Engine version: 11f085a2012c0f4778414c8db2651556ee0ef959
    */
   export type PrismaVersion = {
     client: string
@@ -682,7 +667,6 @@ export namespace Prisma {
   export const ModelName: {
     User: 'User',
     Session: 'Session',
-    Key: 'Key',
     Quest: 'Quest',
     Step: 'Step'
   };
@@ -701,7 +685,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     meta: {
-      modelProps: 'user' | 'session' | 'key' | 'quest' | 'step'
+      modelProps: 'user' | 'session' | 'quest' | 'step'
       txIsolationLevel: Prisma.TransactionIsolationLevel
     },
     model: {
@@ -834,72 +818,6 @@ export namespace Prisma {
           count: {
             args: Prisma.SessionCountArgs<ExtArgs>,
             result: $Utils.Optional<SessionCountAggregateOutputType> | number
-          }
-        }
-      }
-      Key: {
-        payload: Prisma.$KeyPayload<ExtArgs>
-        fields: Prisma.KeyFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.KeyFindUniqueArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$KeyPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.KeyFindUniqueOrThrowArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$KeyPayload>
-          }
-          findFirst: {
-            args: Prisma.KeyFindFirstArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$KeyPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.KeyFindFirstOrThrowArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$KeyPayload>
-          }
-          findMany: {
-            args: Prisma.KeyFindManyArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$KeyPayload>[]
-          }
-          create: {
-            args: Prisma.KeyCreateArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$KeyPayload>
-          }
-          createMany: {
-            args: Prisma.KeyCreateManyArgs<ExtArgs>,
-            result: Prisma.BatchPayload
-          }
-          delete: {
-            args: Prisma.KeyDeleteArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$KeyPayload>
-          }
-          update: {
-            args: Prisma.KeyUpdateArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$KeyPayload>
-          }
-          deleteMany: {
-            args: Prisma.KeyDeleteManyArgs<ExtArgs>,
-            result: Prisma.BatchPayload
-          }
-          updateMany: {
-            args: Prisma.KeyUpdateManyArgs<ExtArgs>,
-            result: Prisma.BatchPayload
-          }
-          upsert: {
-            args: Prisma.KeyUpsertArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$KeyPayload>
-          }
-          aggregate: {
-            args: Prisma.KeyAggregateArgs<ExtArgs>,
-            result: $Utils.Optional<AggregateKey>
-          }
-          groupBy: {
-            args: Prisma.KeyGroupByArgs<ExtArgs>,
-            result: $Utils.Optional<KeyGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.KeyCountArgs<ExtArgs>,
-            result: $Utils.Optional<KeyCountAggregateOutputType> | number
           }
         }
       }
@@ -1185,13 +1103,11 @@ export namespace Prisma {
 
   export type UserCountOutputType = {
     auth_session: number
-    key: number
     quests: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     auth_session?: boolean | UserCountOutputTypeCountAuth_sessionArgs
-    key?: boolean | UserCountOutputTypeCountKeyArgs
     quests?: boolean | UserCountOutputTypeCountQuestsArgs
   }
 
@@ -1213,14 +1129,6 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountAuth_sessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SessionWhereInput
-  }
-
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountKeyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: KeyWhereInput
   }
 
 
@@ -1412,7 +1320,6 @@ export namespace Prisma {
     id?: boolean
     github_username?: boolean
     auth_session?: boolean | User$auth_sessionArgs<ExtArgs>
-    key?: boolean | User$keyArgs<ExtArgs>
     quests?: boolean | User$questsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
@@ -1424,7 +1331,6 @@ export namespace Prisma {
 
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     auth_session?: boolean | User$auth_sessionArgs<ExtArgs>
-    key?: boolean | User$keyArgs<ExtArgs>
     quests?: boolean | User$questsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -1434,7 +1340,6 @@ export namespace Prisma {
     name: "User"
     objects: {
       auth_session: Prisma.$SessionPayload<ExtArgs>[]
-      key: Prisma.$KeyPayload<ExtArgs>[]
       quests: Prisma.$QuestPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -1807,8 +1712,6 @@ export namespace Prisma {
 
     auth_session<T extends User$auth_sessionArgs<ExtArgs> = {}>(args?: Subset<T, User$auth_sessionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, 'findMany'> | Null>;
 
-    key<T extends User$keyArgs<ExtArgs> = {}>(args?: Subset<T, User$keyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KeyPayload<ExtArgs>, T, 'findMany'> | Null>;
-
     quests<T extends User$questsArgs<ExtArgs> = {}>(args?: Subset<T, User$questsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestPayload<ExtArgs>, T, 'findMany'> | Null>;
 
     /**
@@ -2174,27 +2077,6 @@ export namespace Prisma {
 
 
   /**
-   * User.key
-   */
-  export type User$keyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Key
-     */
-    select?: KeySelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: KeyInclude<ExtArgs> | null
-    where?: KeyWhereInput
-    orderBy?: KeyOrderByWithRelationInput | KeyOrderByWithRelationInput[]
-    cursor?: KeyWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: KeyScalarFieldEnum | KeyScalarFieldEnum[]
-  }
-
-
-  /**
    * User.quests
    */
   export type User$questsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2237,74 +2119,46 @@ export namespace Prisma {
 
   export type AggregateSession = {
     _count: SessionCountAggregateOutputType | null
-    _avg: SessionAvgAggregateOutputType | null
-    _sum: SessionSumAggregateOutputType | null
     _min: SessionMinAggregateOutputType | null
     _max: SessionMaxAggregateOutputType | null
   }
 
-  export type SessionAvgAggregateOutputType = {
-    active_expires: number | null
-    idle_expires: number | null
-  }
-
-  export type SessionSumAggregateOutputType = {
-    active_expires: bigint | null
-    idle_expires: bigint | null
-  }
-
   export type SessionMinAggregateOutputType = {
     id: string | null
-    user_id: string | null
-    active_expires: bigint | null
-    idle_expires: bigint | null
+    userId: string | null
+    expiresAt: Date | null
   }
 
   export type SessionMaxAggregateOutputType = {
     id: string | null
-    user_id: string | null
-    active_expires: bigint | null
-    idle_expires: bigint | null
+    userId: string | null
+    expiresAt: Date | null
   }
 
   export type SessionCountAggregateOutputType = {
     id: number
-    user_id: number
-    active_expires: number
-    idle_expires: number
+    userId: number
+    expiresAt: number
     _all: number
   }
 
 
-  export type SessionAvgAggregateInputType = {
-    active_expires?: true
-    idle_expires?: true
-  }
-
-  export type SessionSumAggregateInputType = {
-    active_expires?: true
-    idle_expires?: true
-  }
-
   export type SessionMinAggregateInputType = {
     id?: true
-    user_id?: true
-    active_expires?: true
-    idle_expires?: true
+    userId?: true
+    expiresAt?: true
   }
 
   export type SessionMaxAggregateInputType = {
     id?: true
-    user_id?: true
-    active_expires?: true
-    idle_expires?: true
+    userId?: true
+    expiresAt?: true
   }
 
   export type SessionCountAggregateInputType = {
     id?: true
-    user_id?: true
-    active_expires?: true
-    idle_expires?: true
+    userId?: true
+    expiresAt?: true
     _all?: true
   }
 
@@ -2346,18 +2200,6 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Select which fields to average
-    **/
-    _avg?: SessionAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: SessionSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
      * Select which fields to find the minimum value
     **/
     _min?: SessionMinAggregateInputType
@@ -2388,20 +2230,15 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: SessionCountAggregateInputType | true
-    _avg?: SessionAvgAggregateInputType
-    _sum?: SessionSumAggregateInputType
     _min?: SessionMinAggregateInputType
     _max?: SessionMaxAggregateInputType
   }
 
   export type SessionGroupByOutputType = {
     id: string
-    user_id: string
-    active_expires: bigint
-    idle_expires: bigint
+    userId: string
+    expiresAt: Date
     _count: SessionCountAggregateOutputType | null
-    _avg: SessionAvgAggregateOutputType | null
-    _sum: SessionSumAggregateOutputType | null
     _min: SessionMinAggregateOutputType | null
     _max: SessionMaxAggregateOutputType | null
   }
@@ -2422,17 +2259,15 @@ export namespace Prisma {
 
   export type SessionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    user_id?: boolean
-    active_expires?: boolean
-    idle_expires?: boolean
+    userId?: boolean
+    expiresAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["session"]>
 
   export type SessionSelectScalar = {
     id?: boolean
-    user_id?: boolean
-    active_expires?: boolean
-    idle_expires?: boolean
+    userId?: boolean
+    expiresAt?: boolean
   }
 
   export type SessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2447,9 +2282,8 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      user_id: string
-      active_expires: bigint
-      idle_expires: bigint
+      userId: string
+      expiresAt: Date
     }, ExtArgs["result"]["session"]>
     composites: {}
   }
@@ -2846,9 +2680,8 @@ export namespace Prisma {
    */ 
   interface SessionFieldRefs {
     readonly id: FieldRef<"Session", 'String'>
-    readonly user_id: FieldRef<"Session", 'String'>
-    readonly active_expires: FieldRef<"Session", 'BigInt'>
-    readonly idle_expires: FieldRef<"Session", 'BigInt'>
+    readonly userId: FieldRef<"Session", 'String'>
+    readonly expiresAt: FieldRef<"Session", 'DateTime'>
   }
     
 
@@ -3172,902 +3005,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well.
      */
     include?: SessionInclude<ExtArgs> | null
-  }
-
-
-
-  /**
-   * Model Key
-   */
-
-  export type AggregateKey = {
-    _count: KeyCountAggregateOutputType | null
-    _min: KeyMinAggregateOutputType | null
-    _max: KeyMaxAggregateOutputType | null
-  }
-
-  export type KeyMinAggregateOutputType = {
-    id: string | null
-    hashed_password: string | null
-    user_id: string | null
-  }
-
-  export type KeyMaxAggregateOutputType = {
-    id: string | null
-    hashed_password: string | null
-    user_id: string | null
-  }
-
-  export type KeyCountAggregateOutputType = {
-    id: number
-    hashed_password: number
-    user_id: number
-    _all: number
-  }
-
-
-  export type KeyMinAggregateInputType = {
-    id?: true
-    hashed_password?: true
-    user_id?: true
-  }
-
-  export type KeyMaxAggregateInputType = {
-    id?: true
-    hashed_password?: true
-    user_id?: true
-  }
-
-  export type KeyCountAggregateInputType = {
-    id?: true
-    hashed_password?: true
-    user_id?: true
-    _all?: true
-  }
-
-  export type KeyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Key to aggregate.
-     */
-    where?: KeyWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Keys to fetch.
-     */
-    orderBy?: KeyOrderByWithRelationInput | KeyOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: KeyWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Keys from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Keys.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Keys
-    **/
-    _count?: true | KeyCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: KeyMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: KeyMaxAggregateInputType
-  }
-
-  export type GetKeyAggregateType<T extends KeyAggregateArgs> = {
-        [P in keyof T & keyof AggregateKey]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateKey[P]>
-      : GetScalarType<T[P], AggregateKey[P]>
-  }
-
-
-
-
-  export type KeyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: KeyWhereInput
-    orderBy?: KeyOrderByWithAggregationInput | KeyOrderByWithAggregationInput[]
-    by: KeyScalarFieldEnum[] | KeyScalarFieldEnum
-    having?: KeyScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: KeyCountAggregateInputType | true
-    _min?: KeyMinAggregateInputType
-    _max?: KeyMaxAggregateInputType
-  }
-
-  export type KeyGroupByOutputType = {
-    id: string
-    hashed_password: string | null
-    user_id: string
-    _count: KeyCountAggregateOutputType | null
-    _min: KeyMinAggregateOutputType | null
-    _max: KeyMaxAggregateOutputType | null
-  }
-
-  type GetKeyGroupByPayload<T extends KeyGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<KeyGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof KeyGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], KeyGroupByOutputType[P]>
-            : GetScalarType<T[P], KeyGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type KeySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    hashed_password?: boolean
-    user_id?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["key"]>
-
-  export type KeySelectScalar = {
-    id?: boolean
-    hashed_password?: boolean
-    user_id?: boolean
-  }
-
-  export type KeyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }
-
-
-  export type $KeyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Key"
-    objects: {
-      user: Prisma.$UserPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      hashed_password: string | null
-      user_id: string
-    }, ExtArgs["result"]["key"]>
-    composites: {}
-  }
-
-
-  type KeyGetPayload<S extends boolean | null | undefined | KeyDefaultArgs> = $Result.GetResult<Prisma.$KeyPayload, S>
-
-  type KeyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<KeyFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: KeyCountAggregateInputType | true
-    }
-
-  export interface KeyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Key'], meta: { name: 'Key' } }
-    /**
-     * Find zero or one Key that matches the filter.
-     * @param {KeyFindUniqueArgs} args - Arguments to find a Key
-     * @example
-     * // Get one Key
-     * const key = await prisma.key.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findUnique<T extends KeyFindUniqueArgs<ExtArgs>>(
-      args: SelectSubset<T, KeyFindUniqueArgs<ExtArgs>>
-    ): Prisma__KeyClient<$Result.GetResult<Prisma.$KeyPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
-
-    /**
-     * Find one Key that matches the filter or throw an error  with `error.code='P2025'` 
-     *     if no matches were found.
-     * @param {KeyFindUniqueOrThrowArgs} args - Arguments to find a Key
-     * @example
-     * // Get one Key
-     * const key = await prisma.key.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findUniqueOrThrow<T extends KeyFindUniqueOrThrowArgs<ExtArgs>>(
-      args?: SelectSubset<T, KeyFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__KeyClient<$Result.GetResult<Prisma.$KeyPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
-
-    /**
-     * Find the first Key that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {KeyFindFirstArgs} args - Arguments to find a Key
-     * @example
-     * // Get one Key
-     * const key = await prisma.key.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findFirst<T extends KeyFindFirstArgs<ExtArgs>>(
-      args?: SelectSubset<T, KeyFindFirstArgs<ExtArgs>>
-    ): Prisma__KeyClient<$Result.GetResult<Prisma.$KeyPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
-
-    /**
-     * Find the first Key that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {KeyFindFirstOrThrowArgs} args - Arguments to find a Key
-     * @example
-     * // Get one Key
-     * const key = await prisma.key.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findFirstOrThrow<T extends KeyFindFirstOrThrowArgs<ExtArgs>>(
-      args?: SelectSubset<T, KeyFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__KeyClient<$Result.GetResult<Prisma.$KeyPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
-
-    /**
-     * Find zero or more Keys that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {KeyFindManyArgs=} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Keys
-     * const keys = await prisma.key.findMany()
-     * 
-     * // Get first 10 Keys
-     * const keys = await prisma.key.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const keyWithIdOnly = await prisma.key.findMany({ select: { id: true } })
-     * 
-    **/
-    findMany<T extends KeyFindManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, KeyFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KeyPayload<ExtArgs>, T, 'findMany'>>
-
-    /**
-     * Create a Key.
-     * @param {KeyCreateArgs} args - Arguments to create a Key.
-     * @example
-     * // Create one Key
-     * const Key = await prisma.key.create({
-     *   data: {
-     *     // ... data to create a Key
-     *   }
-     * })
-     * 
-    **/
-    create<T extends KeyCreateArgs<ExtArgs>>(
-      args: SelectSubset<T, KeyCreateArgs<ExtArgs>>
-    ): Prisma__KeyClient<$Result.GetResult<Prisma.$KeyPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
-
-    /**
-     * Create many Keys.
-     *     @param {KeyCreateManyArgs} args - Arguments to create many Keys.
-     *     @example
-     *     // Create many Keys
-     *     const key = await prisma.key.createMany({
-     *       data: {
-     *         // ... provide data here
-     *       }
-     *     })
-     *     
-    **/
-    createMany<T extends KeyCreateManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, KeyCreateManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a Key.
-     * @param {KeyDeleteArgs} args - Arguments to delete one Key.
-     * @example
-     * // Delete one Key
-     * const Key = await prisma.key.delete({
-     *   where: {
-     *     // ... filter to delete one Key
-     *   }
-     * })
-     * 
-    **/
-    delete<T extends KeyDeleteArgs<ExtArgs>>(
-      args: SelectSubset<T, KeyDeleteArgs<ExtArgs>>
-    ): Prisma__KeyClient<$Result.GetResult<Prisma.$KeyPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
-
-    /**
-     * Update one Key.
-     * @param {KeyUpdateArgs} args - Arguments to update one Key.
-     * @example
-     * // Update one Key
-     * const key = await prisma.key.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-    **/
-    update<T extends KeyUpdateArgs<ExtArgs>>(
-      args: SelectSubset<T, KeyUpdateArgs<ExtArgs>>
-    ): Prisma__KeyClient<$Result.GetResult<Prisma.$KeyPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
-
-    /**
-     * Delete zero or more Keys.
-     * @param {KeyDeleteManyArgs} args - Arguments to filter Keys to delete.
-     * @example
-     * // Delete a few Keys
-     * const { count } = await prisma.key.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-    **/
-    deleteMany<T extends KeyDeleteManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, KeyDeleteManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Keys.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {KeyUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Keys
-     * const key = await prisma.key.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-    **/
-    updateMany<T extends KeyUpdateManyArgs<ExtArgs>>(
-      args: SelectSubset<T, KeyUpdateManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one Key.
-     * @param {KeyUpsertArgs} args - Arguments to update or create a Key.
-     * @example
-     * // Update or create a Key
-     * const key = await prisma.key.upsert({
-     *   create: {
-     *     // ... data to create a Key
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Key we want to update
-     *   }
-     * })
-    **/
-    upsert<T extends KeyUpsertArgs<ExtArgs>>(
-      args: SelectSubset<T, KeyUpsertArgs<ExtArgs>>
-    ): Prisma__KeyClient<$Result.GetResult<Prisma.$KeyPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
-
-    /**
-     * Count the number of Keys.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {KeyCountArgs} args - Arguments to filter Keys to count.
-     * @example
-     * // Count the number of Keys
-     * const count = await prisma.key.count({
-     *   where: {
-     *     // ... the filter for the Keys we want to count
-     *   }
-     * })
-    **/
-    count<T extends KeyCountArgs>(
-      args?: Subset<T, KeyCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], KeyCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Key.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {KeyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends KeyAggregateArgs>(args: Subset<T, KeyAggregateArgs>): Prisma.PrismaPromise<GetKeyAggregateType<T>>
-
-    /**
-     * Group by Key.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {KeyGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends KeyGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: KeyGroupByArgs['orderBy'] }
-        : { orderBy?: KeyGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, KeyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetKeyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Key model
-   */
-  readonly fields: KeyFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Key.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__KeyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: 'PrismaPromise';
-
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
-
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
-  }
-
-
-
-  /**
-   * Fields of the Key model
-   */ 
-  interface KeyFieldRefs {
-    readonly id: FieldRef<"Key", 'String'>
-    readonly hashed_password: FieldRef<"Key", 'String'>
-    readonly user_id: FieldRef<"Key", 'String'>
-  }
-    
-
-  // Custom InputTypes
-
-  /**
-   * Key findUnique
-   */
-  export type KeyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Key
-     */
-    select?: KeySelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: KeyInclude<ExtArgs> | null
-    /**
-     * Filter, which Key to fetch.
-     */
-    where: KeyWhereUniqueInput
-  }
-
-
-  /**
-   * Key findUniqueOrThrow
-   */
-  export type KeyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Key
-     */
-    select?: KeySelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: KeyInclude<ExtArgs> | null
-    /**
-     * Filter, which Key to fetch.
-     */
-    where: KeyWhereUniqueInput
-  }
-
-
-  /**
-   * Key findFirst
-   */
-  export type KeyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Key
-     */
-    select?: KeySelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: KeyInclude<ExtArgs> | null
-    /**
-     * Filter, which Key to fetch.
-     */
-    where?: KeyWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Keys to fetch.
-     */
-    orderBy?: KeyOrderByWithRelationInput | KeyOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Keys.
-     */
-    cursor?: KeyWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Keys from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Keys.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Keys.
-     */
-    distinct?: KeyScalarFieldEnum | KeyScalarFieldEnum[]
-  }
-
-
-  /**
-   * Key findFirstOrThrow
-   */
-  export type KeyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Key
-     */
-    select?: KeySelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: KeyInclude<ExtArgs> | null
-    /**
-     * Filter, which Key to fetch.
-     */
-    where?: KeyWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Keys to fetch.
-     */
-    orderBy?: KeyOrderByWithRelationInput | KeyOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Keys.
-     */
-    cursor?: KeyWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Keys from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Keys.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Keys.
-     */
-    distinct?: KeyScalarFieldEnum | KeyScalarFieldEnum[]
-  }
-
-
-  /**
-   * Key findMany
-   */
-  export type KeyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Key
-     */
-    select?: KeySelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: KeyInclude<ExtArgs> | null
-    /**
-     * Filter, which Keys to fetch.
-     */
-    where?: KeyWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Keys to fetch.
-     */
-    orderBy?: KeyOrderByWithRelationInput | KeyOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Keys.
-     */
-    cursor?: KeyWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Keys from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Keys.
-     */
-    skip?: number
-    distinct?: KeyScalarFieldEnum | KeyScalarFieldEnum[]
-  }
-
-
-  /**
-   * Key create
-   */
-  export type KeyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Key
-     */
-    select?: KeySelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: KeyInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Key.
-     */
-    data: XOR<KeyCreateInput, KeyUncheckedCreateInput>
-  }
-
-
-  /**
-   * Key createMany
-   */
-  export type KeyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Keys.
-     */
-    data: KeyCreateManyInput | KeyCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-
-  /**
-   * Key update
-   */
-  export type KeyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Key
-     */
-    select?: KeySelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: KeyInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Key.
-     */
-    data: XOR<KeyUpdateInput, KeyUncheckedUpdateInput>
-    /**
-     * Choose, which Key to update.
-     */
-    where: KeyWhereUniqueInput
-  }
-
-
-  /**
-   * Key updateMany
-   */
-  export type KeyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Keys.
-     */
-    data: XOR<KeyUpdateManyMutationInput, KeyUncheckedUpdateManyInput>
-    /**
-     * Filter which Keys to update
-     */
-    where?: KeyWhereInput
-  }
-
-
-  /**
-   * Key upsert
-   */
-  export type KeyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Key
-     */
-    select?: KeySelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: KeyInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Key to update in case it exists.
-     */
-    where: KeyWhereUniqueInput
-    /**
-     * In case the Key found by the `where` argument doesn't exist, create a new Key with this data.
-     */
-    create: XOR<KeyCreateInput, KeyUncheckedCreateInput>
-    /**
-     * In case the Key was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<KeyUpdateInput, KeyUncheckedUpdateInput>
-  }
-
-
-  /**
-   * Key delete
-   */
-  export type KeyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Key
-     */
-    select?: KeySelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: KeyInclude<ExtArgs> | null
-    /**
-     * Filter which Key to delete.
-     */
-    where: KeyWhereUniqueInput
-  }
-
-
-  /**
-   * Key deleteMany
-   */
-  export type KeyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Keys to delete
-     */
-    where?: KeyWhereInput
-  }
-
-
-  /**
-   * Key without action
-   */
-  export type KeyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Key
-     */
-    select?: KeySelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: KeyInclude<ExtArgs> | null
   }
 
 
@@ -6028,21 +4965,11 @@ export namespace Prisma {
 
   export const SessionScalarFieldEnum: {
     id: 'id',
-    user_id: 'user_id',
-    active_expires: 'active_expires',
-    idle_expires: 'idle_expires'
+    userId: 'userId',
+    expiresAt: 'expiresAt'
   };
 
   export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
-
-
-  export const KeyScalarFieldEnum: {
-    id: 'id',
-    hashed_password: 'hashed_password',
-    user_id: 'user_id'
-  };
-
-  export type KeyScalarFieldEnum = (typeof KeyScalarFieldEnum)[keyof typeof KeyScalarFieldEnum]
 
 
   export const QuestScalarFieldEnum: {
@@ -6083,14 +5010,6 @@ export namespace Prisma {
   export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
-  export const NullsOrder: {
-    first: 'first',
-    last: 'last'
-  };
-
-  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
-
-
   /**
    * Field references 
    */
@@ -6111,16 +5030,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'BigInt'
+   * Reference to a field of type 'DateTime'
    */
-  export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt'>
+  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
     
 
 
   /**
-   * Reference to a field of type 'BigInt[]'
+   * Reference to a field of type 'DateTime[]'
    */
-  export type ListBigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt[]'>
+  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
     
 
 
@@ -6169,7 +5088,6 @@ export namespace Prisma {
     id?: StringFilter<"User"> | string
     github_username?: StringFilter<"User"> | string
     auth_session?: SessionListRelationFilter
-    key?: KeyListRelationFilter
     quests?: QuestListRelationFilter
   }
 
@@ -6177,7 +5095,6 @@ export namespace Prisma {
     id?: SortOrder
     github_username?: SortOrder
     auth_session?: SessionOrderByRelationAggregateInput
-    key?: KeyOrderByRelationAggregateInput
     quests?: QuestOrderByRelationAggregateInput
   }
 
@@ -6188,7 +5105,6 @@ export namespace Prisma {
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     auth_session?: SessionListRelationFilter
-    key?: KeyListRelationFilter
     quests?: QuestListRelationFilter
   }, "id" | "id" | "github_username">
 
@@ -6213,17 +5129,15 @@ export namespace Prisma {
     OR?: SessionWhereInput[]
     NOT?: SessionWhereInput | SessionWhereInput[]
     id?: StringFilter<"Session"> | string
-    user_id?: StringFilter<"Session"> | string
-    active_expires?: BigIntFilter<"Session"> | bigint | number
-    idle_expires?: BigIntFilter<"Session"> | bigint | number
-    user?: XOR<UserRelationFilter, UserWhereInput>
+    userId?: StringFilter<"Session"> | string
+    expiresAt?: DateTimeFilter<"Session"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type SessionOrderByWithRelationInput = {
     id?: SortOrder
-    user_id?: SortOrder
-    active_expires?: SortOrder
-    idle_expires?: SortOrder
+    userId?: SortOrder
+    expiresAt?: SortOrder
     user?: UserOrderByWithRelationInput
   }
 
@@ -6232,22 +5146,18 @@ export namespace Prisma {
     AND?: SessionWhereInput | SessionWhereInput[]
     OR?: SessionWhereInput[]
     NOT?: SessionWhereInput | SessionWhereInput[]
-    user_id?: StringFilter<"Session"> | string
-    active_expires?: BigIntFilter<"Session"> | bigint | number
-    idle_expires?: BigIntFilter<"Session"> | bigint | number
-    user?: XOR<UserRelationFilter, UserWhereInput>
+    userId?: StringFilter<"Session"> | string
+    expiresAt?: DateTimeFilter<"Session"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "id">
 
   export type SessionOrderByWithAggregationInput = {
     id?: SortOrder
-    user_id?: SortOrder
-    active_expires?: SortOrder
-    idle_expires?: SortOrder
+    userId?: SortOrder
+    expiresAt?: SortOrder
     _count?: SessionCountOrderByAggregateInput
-    _avg?: SessionAvgOrderByAggregateInput
     _max?: SessionMaxOrderByAggregateInput
     _min?: SessionMinOrderByAggregateInput
-    _sum?: SessionSumOrderByAggregateInput
   }
 
   export type SessionScalarWhereWithAggregatesInput = {
@@ -6255,54 +5165,8 @@ export namespace Prisma {
     OR?: SessionScalarWhereWithAggregatesInput[]
     NOT?: SessionScalarWhereWithAggregatesInput | SessionScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Session"> | string
-    user_id?: StringWithAggregatesFilter<"Session"> | string
-    active_expires?: BigIntWithAggregatesFilter<"Session"> | bigint | number
-    idle_expires?: BigIntWithAggregatesFilter<"Session"> | bigint | number
-  }
-
-  export type KeyWhereInput = {
-    AND?: KeyWhereInput | KeyWhereInput[]
-    OR?: KeyWhereInput[]
-    NOT?: KeyWhereInput | KeyWhereInput[]
-    id?: StringFilter<"Key"> | string
-    hashed_password?: StringNullableFilter<"Key"> | string | null
-    user_id?: StringFilter<"Key"> | string
-    user?: XOR<UserRelationFilter, UserWhereInput>
-  }
-
-  export type KeyOrderByWithRelationInput = {
-    id?: SortOrder
-    hashed_password?: SortOrderInput | SortOrder
-    user_id?: SortOrder
-    user?: UserOrderByWithRelationInput
-  }
-
-  export type KeyWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: KeyWhereInput | KeyWhereInput[]
-    OR?: KeyWhereInput[]
-    NOT?: KeyWhereInput | KeyWhereInput[]
-    hashed_password?: StringNullableFilter<"Key"> | string | null
-    user_id?: StringFilter<"Key"> | string
-    user?: XOR<UserRelationFilter, UserWhereInput>
-  }, "id" | "id">
-
-  export type KeyOrderByWithAggregationInput = {
-    id?: SortOrder
-    hashed_password?: SortOrderInput | SortOrder
-    user_id?: SortOrder
-    _count?: KeyCountOrderByAggregateInput
-    _max?: KeyMaxOrderByAggregateInput
-    _min?: KeyMinOrderByAggregateInput
-  }
-
-  export type KeyScalarWhereWithAggregatesInput = {
-    AND?: KeyScalarWhereWithAggregatesInput | KeyScalarWhereWithAggregatesInput[]
-    OR?: KeyScalarWhereWithAggregatesInput[]
-    NOT?: KeyScalarWhereWithAggregatesInput | KeyScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Key"> | string
-    hashed_password?: StringNullableWithAggregatesFilter<"Key"> | string | null
-    user_id?: StringWithAggregatesFilter<"Key"> | string
+    userId?: StringWithAggregatesFilter<"Session"> | string
+    expiresAt?: DateTimeWithAggregatesFilter<"Session"> | Date | string
   }
 
   export type QuestWhereInput = {
@@ -6314,7 +5178,7 @@ export namespace Prisma {
     archived?: BoolFilter<"Quest"> | boolean
     user_id?: StringFilter<"Quest"> | string
     index?: IntFilter<"Quest"> | number
-    user?: XOR<UserRelationFilter, UserWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     steps?: StepListRelationFilter
   }
 
@@ -6337,7 +5201,7 @@ export namespace Prisma {
     archived?: BoolFilter<"Quest"> | boolean
     user_id?: StringFilter<"Quest"> | string
     index?: IntFilter<"Quest"> | number
-    user?: XOR<UserRelationFilter, UserWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     steps?: StepListRelationFilter
   }, "id">
 
@@ -6374,7 +5238,7 @@ export namespace Prisma {
     done?: BoolFilter<"Step"> | boolean
     index?: IntFilter<"Step"> | number
     quest_id?: StringFilter<"Step"> | string
-    quest?: XOR<QuestRelationFilter, QuestWhereInput>
+    quest?: XOR<QuestScalarRelationFilter, QuestWhereInput>
   }
 
   export type StepOrderByWithRelationInput = {
@@ -6395,7 +5259,7 @@ export namespace Prisma {
     done?: BoolFilter<"Step"> | boolean
     index?: IntFilter<"Step"> | number
     quest_id?: StringFilter<"Step"> | string
-    quest?: XOR<QuestRelationFilter, QuestWhereInput>
+    quest?: XOR<QuestScalarRelationFilter, QuestWhereInput>
   }, "id">
 
   export type StepOrderByWithAggregationInput = {
@@ -6426,7 +5290,6 @@ export namespace Prisma {
     id: string
     github_username: string
     auth_session?: SessionCreateNestedManyWithoutUserInput
-    key?: KeyCreateNestedManyWithoutUserInput
     quests?: QuestCreateNestedManyWithoutUserInput
   }
 
@@ -6434,7 +5297,6 @@ export namespace Prisma {
     id: string
     github_username: string
     auth_session?: SessionUncheckedCreateNestedManyWithoutUserInput
-    key?: KeyUncheckedCreateNestedManyWithoutUserInput
     quests?: QuestUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -6442,7 +5304,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     github_username?: StringFieldUpdateOperationsInput | string
     auth_session?: SessionUpdateManyWithoutUserNestedInput
-    key?: KeyUpdateManyWithoutUserNestedInput
     quests?: QuestUpdateManyWithoutUserNestedInput
   }
 
@@ -6450,7 +5311,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     github_username?: StringFieldUpdateOperationsInput | string
     auth_session?: SessionUncheckedUpdateManyWithoutUserNestedInput
-    key?: KeyUncheckedUpdateManyWithoutUserNestedInput
     quests?: QuestUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -6471,91 +5331,43 @@ export namespace Prisma {
 
   export type SessionCreateInput = {
     id: string
-    active_expires: bigint | number
-    idle_expires: bigint | number
+    expiresAt: Date | string
     user: UserCreateNestedOneWithoutAuth_sessionInput
   }
 
   export type SessionUncheckedCreateInput = {
     id: string
-    user_id: string
-    active_expires: bigint | number
-    idle_expires: bigint | number
+    userId: string
+    expiresAt: Date | string
   }
 
   export type SessionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    active_expires?: BigIntFieldUpdateOperationsInput | bigint | number
-    idle_expires?: BigIntFieldUpdateOperationsInput | bigint | number
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutAuth_sessionNestedInput
   }
 
   export type SessionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    user_id?: StringFieldUpdateOperationsInput | string
-    active_expires?: BigIntFieldUpdateOperationsInput | bigint | number
-    idle_expires?: BigIntFieldUpdateOperationsInput | bigint | number
+    userId?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SessionCreateManyInput = {
     id: string
-    user_id: string
-    active_expires: bigint | number
-    idle_expires: bigint | number
+    userId: string
+    expiresAt: Date | string
   }
 
   export type SessionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    active_expires?: BigIntFieldUpdateOperationsInput | bigint | number
-    idle_expires?: BigIntFieldUpdateOperationsInput | bigint | number
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SessionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    user_id?: StringFieldUpdateOperationsInput | string
-    active_expires?: BigIntFieldUpdateOperationsInput | bigint | number
-    idle_expires?: BigIntFieldUpdateOperationsInput | bigint | number
-  }
-
-  export type KeyCreateInput = {
-    id: string
-    hashed_password?: string | null
-    user: UserCreateNestedOneWithoutKeyInput
-  }
-
-  export type KeyUncheckedCreateInput = {
-    id: string
-    hashed_password?: string | null
-    user_id: string
-  }
-
-  export type KeyUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    hashed_password?: NullableStringFieldUpdateOperationsInput | string | null
-    user?: UserUpdateOneRequiredWithoutKeyNestedInput
-  }
-
-  export type KeyUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    hashed_password?: NullableStringFieldUpdateOperationsInput | string | null
-    user_id?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type KeyCreateManyInput = {
-    id: string
-    hashed_password?: string | null
-    user_id: string
-  }
-
-  export type KeyUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    hashed_password?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type KeyUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    hashed_password?: NullableStringFieldUpdateOperationsInput | string | null
-    user_id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type QuestCreateInput = {
@@ -6693,12 +5505,6 @@ export namespace Prisma {
     none?: SessionWhereInput
   }
 
-  export type KeyListRelationFilter = {
-    every?: KeyWhereInput
-    some?: KeyWhereInput
-    none?: KeyWhereInput
-  }
-
   export type QuestListRelationFilter = {
     every?: QuestWhereInput
     some?: QuestWhereInput
@@ -6706,10 +5512,6 @@ export namespace Prisma {
   }
 
   export type SessionOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type KeyOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -6750,123 +5552,52 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
-  export type BigIntFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntFilter<$PrismaModel> | bigint | number
+  export type DateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type UserRelationFilter = {
+  export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
   }
 
   export type SessionCountOrderByAggregateInput = {
     id?: SortOrder
-    user_id?: SortOrder
-    active_expires?: SortOrder
-    idle_expires?: SortOrder
-  }
-
-  export type SessionAvgOrderByAggregateInput = {
-    active_expires?: SortOrder
-    idle_expires?: SortOrder
+    userId?: SortOrder
+    expiresAt?: SortOrder
   }
 
   export type SessionMaxOrderByAggregateInput = {
     id?: SortOrder
-    user_id?: SortOrder
-    active_expires?: SortOrder
-    idle_expires?: SortOrder
+    userId?: SortOrder
+    expiresAt?: SortOrder
   }
 
   export type SessionMinOrderByAggregateInput = {
     id?: SortOrder
-    user_id?: SortOrder
-    active_expires?: SortOrder
-    idle_expires?: SortOrder
+    userId?: SortOrder
+    expiresAt?: SortOrder
   }
 
-  export type SessionSumOrderByAggregateInput = {
-    active_expires?: SortOrder
-    idle_expires?: SortOrder
-  }
-
-  export type BigIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntWithAggregatesFilter<$PrismaModel> | bigint | number
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
     _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedBigIntFilter<$PrismaModel>
-    _min?: NestedBigIntFilter<$PrismaModel>
-    _max?: NestedBigIntFilter<$PrismaModel>
-  }
-
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
-  }
-
-  export type KeyCountOrderByAggregateInput = {
-    id?: SortOrder
-    hashed_password?: SortOrder
-    user_id?: SortOrder
-  }
-
-  export type KeyMaxOrderByAggregateInput = {
-    id?: SortOrder
-    hashed_password?: SortOrder
-    user_id?: SortOrder
-  }
-
-  export type KeyMinOrderByAggregateInput = {
-    id?: SortOrder
-    hashed_password?: SortOrder
-    user_id?: SortOrder
-  }
-
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type BoolFilter<$PrismaModel = never> = {
@@ -6951,7 +5682,7 @@ export namespace Prisma {
     _max?: NestedIntFilter<$PrismaModel>
   }
 
-  export type QuestRelationFilter = {
+  export type QuestScalarRelationFilter = {
     is?: QuestWhereInput
     isNot?: QuestWhereInput
   }
@@ -6995,13 +5726,6 @@ export namespace Prisma {
     connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
   }
 
-  export type KeyCreateNestedManyWithoutUserInput = {
-    create?: XOR<KeyCreateWithoutUserInput, KeyUncheckedCreateWithoutUserInput> | KeyCreateWithoutUserInput[] | KeyUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: KeyCreateOrConnectWithoutUserInput | KeyCreateOrConnectWithoutUserInput[]
-    createMany?: KeyCreateManyUserInputEnvelope
-    connect?: KeyWhereUniqueInput | KeyWhereUniqueInput[]
-  }
-
   export type QuestCreateNestedManyWithoutUserInput = {
     create?: XOR<QuestCreateWithoutUserInput, QuestUncheckedCreateWithoutUserInput> | QuestCreateWithoutUserInput[] | QuestUncheckedCreateWithoutUserInput[]
     connectOrCreate?: QuestCreateOrConnectWithoutUserInput | QuestCreateOrConnectWithoutUserInput[]
@@ -7014,13 +5738,6 @@ export namespace Prisma {
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
     createMany?: SessionCreateManyUserInputEnvelope
     connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
-  }
-
-  export type KeyUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<KeyCreateWithoutUserInput, KeyUncheckedCreateWithoutUserInput> | KeyCreateWithoutUserInput[] | KeyUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: KeyCreateOrConnectWithoutUserInput | KeyCreateOrConnectWithoutUserInput[]
-    createMany?: KeyCreateManyUserInputEnvelope
-    connect?: KeyWhereUniqueInput | KeyWhereUniqueInput[]
   }
 
   export type QuestUncheckedCreateNestedManyWithoutUserInput = {
@@ -7046,20 +5763,6 @@ export namespace Prisma {
     update?: SessionUpdateWithWhereUniqueWithoutUserInput | SessionUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: SessionUpdateManyWithWhereWithoutUserInput | SessionUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: SessionScalarWhereInput | SessionScalarWhereInput[]
-  }
-
-  export type KeyUpdateManyWithoutUserNestedInput = {
-    create?: XOR<KeyCreateWithoutUserInput, KeyUncheckedCreateWithoutUserInput> | KeyCreateWithoutUserInput[] | KeyUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: KeyCreateOrConnectWithoutUserInput | KeyCreateOrConnectWithoutUserInput[]
-    upsert?: KeyUpsertWithWhereUniqueWithoutUserInput | KeyUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: KeyCreateManyUserInputEnvelope
-    set?: KeyWhereUniqueInput | KeyWhereUniqueInput[]
-    disconnect?: KeyWhereUniqueInput | KeyWhereUniqueInput[]
-    delete?: KeyWhereUniqueInput | KeyWhereUniqueInput[]
-    connect?: KeyWhereUniqueInput | KeyWhereUniqueInput[]
-    update?: KeyUpdateWithWhereUniqueWithoutUserInput | KeyUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: KeyUpdateManyWithWhereWithoutUserInput | KeyUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: KeyScalarWhereInput | KeyScalarWhereInput[]
   }
 
   export type QuestUpdateManyWithoutUserNestedInput = {
@@ -7090,20 +5793,6 @@ export namespace Prisma {
     deleteMany?: SessionScalarWhereInput | SessionScalarWhereInput[]
   }
 
-  export type KeyUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<KeyCreateWithoutUserInput, KeyUncheckedCreateWithoutUserInput> | KeyCreateWithoutUserInput[] | KeyUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: KeyCreateOrConnectWithoutUserInput | KeyCreateOrConnectWithoutUserInput[]
-    upsert?: KeyUpsertWithWhereUniqueWithoutUserInput | KeyUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: KeyCreateManyUserInputEnvelope
-    set?: KeyWhereUniqueInput | KeyWhereUniqueInput[]
-    disconnect?: KeyWhereUniqueInput | KeyWhereUniqueInput[]
-    delete?: KeyWhereUniqueInput | KeyWhereUniqueInput[]
-    connect?: KeyWhereUniqueInput | KeyWhereUniqueInput[]
-    update?: KeyUpdateWithWhereUniqueWithoutUserInput | KeyUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: KeyUpdateManyWithWhereWithoutUserInput | KeyUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: KeyScalarWhereInput | KeyScalarWhereInput[]
-  }
-
   export type QuestUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<QuestCreateWithoutUserInput, QuestUncheckedCreateWithoutUserInput> | QuestCreateWithoutUserInput[] | QuestUncheckedCreateWithoutUserInput[]
     connectOrCreate?: QuestCreateOrConnectWithoutUserInput | QuestCreateOrConnectWithoutUserInput[]
@@ -7124,12 +5813,8 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
-  export type BigIntFieldUpdateOperationsInput = {
-    set?: bigint | number
-    increment?: bigint | number
-    decrement?: bigint | number
-    multiply?: bigint | number
-    divide?: bigint | number
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
   }
 
   export type UserUpdateOneRequiredWithoutAuth_sessionNestedInput = {
@@ -7138,24 +5823,6 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutAuth_sessionInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAuth_sessionInput, UserUpdateWithoutAuth_sessionInput>, UserUncheckedUpdateWithoutAuth_sessionInput>
-  }
-
-  export type UserCreateNestedOneWithoutKeyInput = {
-    create?: XOR<UserCreateWithoutKeyInput, UserUncheckedCreateWithoutKeyInput>
-    connectOrCreate?: UserCreateOrConnectWithoutKeyInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
-  }
-
-  export type UserUpdateOneRequiredWithoutKeyNestedInput = {
-    create?: XOR<UserCreateWithoutKeyInput, UserUncheckedCreateWithoutKeyInput>
-    connectOrCreate?: UserCreateOrConnectWithoutKeyInput
-    upsert?: UserUpsertWithoutKeyInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutKeyInput, UserUpdateWithoutKeyInput>, UserUncheckedUpdateWithoutKeyInput>
   }
 
   export type UserCreateNestedOneWithoutQuestsInput = {
@@ -7282,84 +5949,29 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
-  export type NestedBigIntFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntFilter<$PrismaModel> | bigint | number
+  export type NestedDateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type NestedBigIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntWithAggregatesFilter<$PrismaModel> | bigint | number
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
     _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedBigIntFilter<$PrismaModel>
-    _min?: NestedBigIntFilter<$PrismaModel>
-    _max?: NestedBigIntFilter<$PrismaModel>
-  }
-
-  export type NestedFloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
-  }
-
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type NestedBoolFilter<$PrismaModel = never> = {
@@ -7391,16 +6003,25 @@ export namespace Prisma {
     _max?: NestedIntFilter<$PrismaModel>
   }
 
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
   export type SessionCreateWithoutUserInput = {
     id: string
-    active_expires: bigint | number
-    idle_expires: bigint | number
+    expiresAt: Date | string
   }
 
   export type SessionUncheckedCreateWithoutUserInput = {
     id: string
-    active_expires: bigint | number
-    idle_expires: bigint | number
+    expiresAt: Date | string
   }
 
   export type SessionCreateOrConnectWithoutUserInput = {
@@ -7410,26 +6031,6 @@ export namespace Prisma {
 
   export type SessionCreateManyUserInputEnvelope = {
     data: SessionCreateManyUserInput | SessionCreateManyUserInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type KeyCreateWithoutUserInput = {
-    id: string
-    hashed_password?: string | null
-  }
-
-  export type KeyUncheckedCreateWithoutUserInput = {
-    id: string
-    hashed_password?: string | null
-  }
-
-  export type KeyCreateOrConnectWithoutUserInput = {
-    where: KeyWhereUniqueInput
-    create: XOR<KeyCreateWithoutUserInput, KeyUncheckedCreateWithoutUserInput>
-  }
-
-  export type KeyCreateManyUserInputEnvelope = {
-    data: KeyCreateManyUserInput | KeyCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -7480,34 +6081,8 @@ export namespace Prisma {
     OR?: SessionScalarWhereInput[]
     NOT?: SessionScalarWhereInput | SessionScalarWhereInput[]
     id?: StringFilter<"Session"> | string
-    user_id?: StringFilter<"Session"> | string
-    active_expires?: BigIntFilter<"Session"> | bigint | number
-    idle_expires?: BigIntFilter<"Session"> | bigint | number
-  }
-
-  export type KeyUpsertWithWhereUniqueWithoutUserInput = {
-    where: KeyWhereUniqueInput
-    update: XOR<KeyUpdateWithoutUserInput, KeyUncheckedUpdateWithoutUserInput>
-    create: XOR<KeyCreateWithoutUserInput, KeyUncheckedCreateWithoutUserInput>
-  }
-
-  export type KeyUpdateWithWhereUniqueWithoutUserInput = {
-    where: KeyWhereUniqueInput
-    data: XOR<KeyUpdateWithoutUserInput, KeyUncheckedUpdateWithoutUserInput>
-  }
-
-  export type KeyUpdateManyWithWhereWithoutUserInput = {
-    where: KeyScalarWhereInput
-    data: XOR<KeyUpdateManyMutationInput, KeyUncheckedUpdateManyWithoutUserInput>
-  }
-
-  export type KeyScalarWhereInput = {
-    AND?: KeyScalarWhereInput | KeyScalarWhereInput[]
-    OR?: KeyScalarWhereInput[]
-    NOT?: KeyScalarWhereInput | KeyScalarWhereInput[]
-    id?: StringFilter<"Key"> | string
-    hashed_password?: StringNullableFilter<"Key"> | string | null
-    user_id?: StringFilter<"Key"> | string
+    userId?: StringFilter<"Session"> | string
+    expiresAt?: DateTimeFilter<"Session"> | Date | string
   }
 
   export type QuestUpsertWithWhereUniqueWithoutUserInput = {
@@ -7540,14 +6115,12 @@ export namespace Prisma {
   export type UserCreateWithoutAuth_sessionInput = {
     id: string
     github_username: string
-    key?: KeyCreateNestedManyWithoutUserInput
     quests?: QuestCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAuth_sessionInput = {
     id: string
     github_username: string
-    key?: KeyUncheckedCreateNestedManyWithoutUserInput
     quests?: QuestUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -7570,58 +6143,12 @@ export namespace Prisma {
   export type UserUpdateWithoutAuth_sessionInput = {
     id?: StringFieldUpdateOperationsInput | string
     github_username?: StringFieldUpdateOperationsInput | string
-    key?: KeyUpdateManyWithoutUserNestedInput
     quests?: QuestUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuth_sessionInput = {
     id?: StringFieldUpdateOperationsInput | string
     github_username?: StringFieldUpdateOperationsInput | string
-    key?: KeyUncheckedUpdateManyWithoutUserNestedInput
-    quests?: QuestUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserCreateWithoutKeyInput = {
-    id: string
-    github_username: string
-    auth_session?: SessionCreateNestedManyWithoutUserInput
-    quests?: QuestCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutKeyInput = {
-    id: string
-    github_username: string
-    auth_session?: SessionUncheckedCreateNestedManyWithoutUserInput
-    quests?: QuestUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutKeyInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutKeyInput, UserUncheckedCreateWithoutKeyInput>
-  }
-
-  export type UserUpsertWithoutKeyInput = {
-    update: XOR<UserUpdateWithoutKeyInput, UserUncheckedUpdateWithoutKeyInput>
-    create: XOR<UserCreateWithoutKeyInput, UserUncheckedCreateWithoutKeyInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutKeyInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutKeyInput, UserUncheckedUpdateWithoutKeyInput>
-  }
-
-  export type UserUpdateWithoutKeyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    github_username?: StringFieldUpdateOperationsInput | string
-    auth_session?: SessionUpdateManyWithoutUserNestedInput
-    quests?: QuestUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutKeyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    github_username?: StringFieldUpdateOperationsInput | string
-    auth_session?: SessionUncheckedUpdateManyWithoutUserNestedInput
     quests?: QuestUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -7629,14 +6156,12 @@ export namespace Prisma {
     id: string
     github_username: string
     auth_session?: SessionCreateNestedManyWithoutUserInput
-    key?: KeyCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutQuestsInput = {
     id: string
     github_username: string
     auth_session?: SessionUncheckedCreateNestedManyWithoutUserInput
-    key?: KeyUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutQuestsInput = {
@@ -7683,14 +6208,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     github_username?: StringFieldUpdateOperationsInput | string
     auth_session?: SessionUpdateManyWithoutUserNestedInput
-    key?: KeyUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutQuestsInput = {
     id?: StringFieldUpdateOperationsInput | string
     github_username?: StringFieldUpdateOperationsInput | string
     auth_session?: SessionUncheckedUpdateManyWithoutUserNestedInput
-    key?: KeyUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type StepUpsertWithWhereUniqueWithoutQuestInput = {
@@ -7770,13 +6293,7 @@ export namespace Prisma {
 
   export type SessionCreateManyUserInput = {
     id: string
-    active_expires: bigint | number
-    idle_expires: bigint | number
-  }
-
-  export type KeyCreateManyUserInput = {
-    id: string
-    hashed_password?: string | null
+    expiresAt: Date | string
   }
 
   export type QuestCreateManyUserInput = {
@@ -7788,35 +6305,17 @@ export namespace Prisma {
 
   export type SessionUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    active_expires?: BigIntFieldUpdateOperationsInput | bigint | number
-    idle_expires?: BigIntFieldUpdateOperationsInput | bigint | number
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SessionUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    active_expires?: BigIntFieldUpdateOperationsInput | bigint | number
-    idle_expires?: BigIntFieldUpdateOperationsInput | bigint | number
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SessionUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    active_expires?: BigIntFieldUpdateOperationsInput | bigint | number
-    idle_expires?: BigIntFieldUpdateOperationsInput | bigint | number
-  }
-
-  export type KeyUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    hashed_password?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type KeyUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    hashed_password?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type KeyUncheckedUpdateManyWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    hashed_password?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type QuestUpdateWithoutUserInput = {
@@ -7891,10 +6390,6 @@ export namespace Prisma {
      * @deprecated Use SessionDefaultArgs instead
      */
     export type SessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SessionDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use KeyDefaultArgs instead
-     */
-    export type KeyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = KeyDefaultArgs<ExtArgs>
     /**
      * @deprecated Use QuestDefaultArgs instead
      */

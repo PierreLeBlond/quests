@@ -5,14 +5,13 @@ import { safeAction } from "@/lib/safeAction";
 import { questsInputsSchema } from "@/lib/schema/questsInputsSchema";
 import { getUserQuests } from "@/lib/user/getUserQuests";
 import prisma from "@/prisma/prisma";
+import { QuestInput } from "@/types/Quest";
+import { InferSafeActionFnResult } from "next-safe-action";
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
 
-type Data = z.infer<typeof questsInputsSchema>;
-
-export const saveQuests = safeAction(
-  questsInputsSchema,
-  async (questsInputs: Data) => {
+export const saveQuests = safeAction
+  .schema(questsInputsSchema)
+  .action(async ({ parsedInput: questsInputs }) => {
     const user = await getUser();
 
     if (!user) {
@@ -22,7 +21,7 @@ export const saveQuests = safeAction(
     const quests = await prisma.quest.findMany({
       where: {
         user: {
-          id: user.userId,
+          id: user.id,
         },
       },
     });
@@ -46,7 +45,7 @@ export const saveQuests = safeAction(
 
     await prisma.user.update({
       where: {
-        id: user.userId,
+        id: user.id,
       },
       data: {
         quests: {
@@ -75,7 +74,7 @@ export const saveQuests = safeAction(
           data: {
             name: questInput.name,
             index: questInput.index,
-            user_id: user.userId,
+            user_id: user.id,
           },
         }),
       ),
@@ -84,5 +83,6 @@ export const saveQuests = safeAction(
     revalidatePath("/");
 
     return getUserQuests(user);
-  },
-);
+  });
+
+export type SaveQuestsAction = typeof saveQuests;

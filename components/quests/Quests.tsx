@@ -3,10 +3,8 @@
 import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import Link from "next/link";
-import { SafeAction } from "next-safe-action";
 import { Quest } from "@/types/Quest";
 import { useAppStateDispatch } from "@/state/StateProvider";
-import { questsInputsSchema } from "@/lib/schema/questsInputsSchema";
 import { Item } from "./item/Item";
 import { EditMode } from "./editMode";
 import { EditMenu } from "./menu/EditMenu";
@@ -15,10 +13,11 @@ import { DeleteItem } from "./item/DeleteItem";
 import { EditItem } from "./item/EditItem";
 import { CreateItem } from "./item/CreateItem";
 import { ReorderArea } from "./ReorderArea";
+import { type SaveQuestsAction } from "@/actions/saveQuests";
 
 type QuestsProps = {
   quests: Quest[];
-  saveQuests: SafeAction<typeof questsInputsSchema, Quest[]>;
+  saveQuests: SaveQuestsAction;
 };
 
 type QuestField = {
@@ -28,8 +27,6 @@ type QuestField = {
 type QuestFieldWithId = QuestField & { id: string };
 
 export function Quests({ props }: { props: QuestsProps }) {
-  const { saveQuests } = props;
-
   // Lifted up states
   const [grabbedId, setGrabbedId] = useState<string | null>(null);
   const [grabbedPosition, setGrabbedPosition] = useState(0);
@@ -86,9 +83,9 @@ export function Quests({ props }: { props: QuestsProps }) {
     // Let's keep a copy of the current fields to properly match new ids latter
     const currentFields = fields.slice(0);
 
-    dispatch({ type: "submit" });
     setSaving(true);
-    const { data, validationErrors, serverError } = await saveQuests(
+    dispatch({ type: "submit" });
+    const response = await props.saveQuests(
       fields.map((field, index) => ({
         name: field.name,
         index,
@@ -97,7 +94,12 @@ export function Quests({ props }: { props: QuestsProps }) {
       })),
     );
 
-    if (validationErrors || serverError) {
+    if (
+      !response ||
+      !response.data ||
+      response.validationErrors ||
+      response.serverError
+    ) {
       dispatch({ type: "fail" });
       return;
     }
@@ -105,14 +107,10 @@ export function Quests({ props }: { props: QuestsProps }) {
     dispatch({ type: "succeed" });
     setSaving(false);
 
-    if (!data) {
-      return;
-    }
-
-    setQuests(data);
+    setQuests(response.data);
 
     // Add new ids to corresponding fields
-    data.forEach((quest, index) => {
+    response.data.forEach((quest, index) => {
       const oldField = currentFields.at(index) as QuestFieldWithId;
       const field = fields.find(
         ({ id }) => id === oldField.id,
@@ -166,6 +164,7 @@ export function Quests({ props }: { props: QuestsProps }) {
                   <div className="absolute bottom-0 flex h-2 w-full gap-2 pl-10 pr-10">
                     {steps.map((step) => (
                       <div
+                        key={step.id}
                         className={`h-2 w-2 rounded-full ${
                           step.done
                             ? "bg-stone-500"
