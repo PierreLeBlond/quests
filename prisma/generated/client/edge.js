@@ -7,12 +7,12 @@ const {
   PrismaClientRustPanicError,
   PrismaClientInitializationError,
   PrismaClientValidationError,
-  NotFoundError,
   getPrismaClient,
   sqltag,
   empty,
   join,
   raw,
+  skip,
   Decimal,
   Debug,
   objectEnumValues,
@@ -21,8 +21,8 @@ const {
   warnOnce,
   defineDmmfProperty,
   Public,
-  detectRuntime,
-} = require('./runtime/edge')
+  getRuntime
+} = require('./runtime/edge.js')
 
 
 const Prisma = {}
@@ -31,11 +31,11 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 5.8.0
+ * Prisma Client JS version: 6.1.0
  * Query Engine version: 11f085a2012c0f4778414c8db2651556ee0ef959
  */
 Prisma.prismaVersion = {
-  client: "5.8.0",
+  client: "6.1.0",
   engine: "11f085a2012c0f4778414c8db2651556ee0ef959"
 }
 
@@ -44,7 +44,6 @@ Prisma.PrismaClientUnknownRequestError = PrismaClientUnknownRequestError
 Prisma.PrismaClientRustPanicError = PrismaClientRustPanicError
 Prisma.PrismaClientInitializationError = PrismaClientInitializationError
 Prisma.PrismaClientValidationError = PrismaClientValidationError
-Prisma.NotFoundError = NotFoundError
 Prisma.Decimal = Decimal
 
 /**
@@ -74,6 +73,8 @@ Prisma.NullTypes = {
   JsonNull: objectEnumValues.classes.JsonNull,
   AnyNull: objectEnumValues.classes.AnyNull
 }
+
+
 
 
 
@@ -164,12 +165,13 @@ const config = {
     "schemaEnvPath": "../../../.env"
   },
   "relativePath": "../..",
-  "clientVersion": "5.8.0",
+  "clientVersion": "6.1.0",
   "engineVersion": "11f085a2012c0f4778414c8db2651556ee0ef959",
   "datasourceNames": [
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -178,14 +180,15 @@ const config = {
       }
     }
   },
-  "inlineSchema": "Z2VuZXJhdG9yIGNsaWVudCB7CiAgcHJvdmlkZXIgPSAicHJpc21hLWNsaWVudC1qcyIKICBvdXRwdXQgICA9ICIuL2dlbmVyYXRlZC9jbGllbnQiCn0KCmRhdGFzb3VyY2UgZGIgewogIHByb3ZpZGVyID0gInBvc3RncmVzIgogIHVybCAgICAgID0gZW52KCJEQVRBQkFTRV9VUkwiKQp9Cgptb2RlbCBVc2VyIHsKICBpZCBTdHJpbmcgQGlkIEB1bmlxdWUKCiAgYXV0aF9zZXNzaW9uIFNlc3Npb25bXQogIHF1ZXN0cyAgICAgICBRdWVzdFtdCgogIGdpdGh1Yl91c2VybmFtZSBTdHJpbmcgQHVuaXF1ZQp9Cgptb2RlbCBTZXNzaW9uIHsKICBpZCAgICAgICAgU3RyaW5nICAgQGlkIEB1bmlxdWUKICB1c2VySWQgICAgU3RyaW5nCiAgZXhwaXJlc0F0IERhdGVUaW1lCiAgdXNlciAgICAgIFVzZXIgICAgIEByZWxhdGlvbihyZWZlcmVuY2VzOiBbaWRdLCBmaWVsZHM6IFt1c2VySWRdLCBvbkRlbGV0ZTogQ2FzY2FkZSkKfQoKbW9kZWwgUXVlc3QgewogIGlkICAgICAgIFN0cmluZyAgQGlkIEBkZWZhdWx0KHV1aWQoKSkKICBuYW1lICAgICBTdHJpbmcKICBhcmNoaXZlZCBCb29sZWFuIEBkZWZhdWx0KGZhbHNlKQoKICB1c2VyX2lkIFN0cmluZwogIHVzZXIgICAgVXNlciAgIEByZWxhdGlvbihyZWZlcmVuY2VzOiBbaWRdLCBmaWVsZHM6IFt1c2VyX2lkXSwgb25EZWxldGU6IENhc2NhZGUpCgogIGluZGV4IEludAoKICBzdGVwcyBTdGVwW10KfQoKbW9kZWwgU3RlcCB7CiAgaWQgICAgICAgICAgU3RyaW5nICBAaWQgQGRlZmF1bHQodXVpZCgpKQogIGRlc2NyaXB0aW9uIFN0cmluZwogIGRvbmUgICAgICAgIEJvb2xlYW4gQGRlZmF1bHQoZmFsc2UpCgogIGluZGV4IEludAoKICBxdWVzdF9pZCBTdHJpbmcKICBxdWVzdCAgICBRdWVzdCAgQHJlbGF0aW9uKHJlZmVyZW5jZXM6IFtpZF0sIGZpZWxkczogW3F1ZXN0X2lkXSwgb25EZWxldGU6IENhc2NhZGUpCn0K",
-  "inlineSchemaHash": "14a5afe4cd86d0f3c1366dab5650885ba76353e549f9ebe76a1d78bceac34ef6"
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated/client\"\n}\n\ndatasource db {\n  provider = \"postgres\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id String @id @unique\n\n  auth_session Session[]\n  quests       Quest[]\n\n  github_username String @unique\n}\n\nmodel Session {\n  id        String   @id @unique\n  userId    String\n  expiresAt DateTime\n  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)\n}\n\nmodel Quest {\n  id       String  @id @default(uuid())\n  name     String\n  archived Boolean @default(false)\n\n  user_id String\n  user    User   @relation(references: [id], fields: [user_id], onDelete: Cascade)\n\n  index Int\n\n  steps Step[]\n}\n\nmodel Step {\n  id          String  @id @default(uuid())\n  description String\n  done        Boolean @default(false)\n\n  index Int\n\n  quest_id String\n  quest    Quest  @relation(references: [id], fields: [quest_id], onDelete: Cascade)\n}\n",
+  "inlineSchemaHash": "14a5afe4cd86d0f3c1366dab5650885ba76353e549f9ebe76a1d78bceac34ef6",
+  "copyEngine": true
 }
 config.dirname = '/'
 
 config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"dbName\":null,\"schema\":null,\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":true,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"auth_session\",\"kind\":\"object\",\"isList\":true,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Session\",\"nativeType\":null,\"relationName\":\"SessionToUser\",\"relationFromFields\":[],\"relationToFields\":[],\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"quests\",\"kind\":\"object\",\"isList\":true,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Quest\",\"nativeType\":null,\"relationName\":\"QuestToUser\",\"relationFromFields\":[],\"relationToFields\":[],\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"github_username\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":true,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false}],\"primaryKey\":null,\"uniqueFields\":[],\"uniqueIndexes\":[],\"isGenerated\":false},\"Session\":{\"dbName\":null,\"schema\":null,\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":true,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"userId\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":true,\"hasDefaultValue\":false,\"type\":\"String\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"DateTime\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"user\",\"kind\":\"object\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"User\",\"nativeType\":null,\"relationName\":\"SessionToUser\",\"relationFromFields\":[\"userId\"],\"relationToFields\":[\"id\"],\"relationOnDelete\":\"Cascade\",\"isGenerated\":false,\"isUpdatedAt\":false}],\"primaryKey\":null,\"uniqueFields\":[],\"uniqueIndexes\":[],\"isGenerated\":false},\"Quest\":{\"dbName\":null,\"schema\":null,\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":true,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"String\",\"nativeType\":null,\"default\":{\"name\":\"uuid\",\"args\":[4]},\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"name\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"archived\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"Boolean\",\"nativeType\":null,\"default\":false,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"user_id\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":true,\"hasDefaultValue\":false,\"type\":\"String\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"user\",\"kind\":\"object\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"User\",\"nativeType\":null,\"relationName\":\"QuestToUser\",\"relationFromFields\":[\"user_id\"],\"relationToFields\":[\"id\"],\"relationOnDelete\":\"Cascade\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"index\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Int\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"steps\",\"kind\":\"object\",\"isList\":true,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Step\",\"nativeType\":null,\"relationName\":\"QuestToStep\",\"relationFromFields\":[],\"relationToFields\":[],\"isGenerated\":false,\"isUpdatedAt\":false}],\"primaryKey\":null,\"uniqueFields\":[],\"uniqueIndexes\":[],\"isGenerated\":false},\"Step\":{\"dbName\":null,\"schema\":null,\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":true,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"String\",\"nativeType\":null,\"default\":{\"name\":\"uuid\",\"args\":[4]},\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"description\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"done\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"Boolean\",\"nativeType\":null,\"default\":false,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"index\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Int\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"quest_id\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":true,\"hasDefaultValue\":false,\"type\":\"String\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"quest\",\"kind\":\"object\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Quest\",\"nativeType\":null,\"relationName\":\"QuestToStep\",\"relationFromFields\":[\"quest_id\"],\"relationToFields\":[\"id\"],\"relationOnDelete\":\"Cascade\",\"isGenerated\":false,\"isUpdatedAt\":false}],\"primaryKey\":null,\"uniqueFields\":[],\"uniqueIndexes\":[],\"isGenerated\":false}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
-config.getQueryEngineWasmModule = undefined
+config.engineWasm = undefined
 
 config.injectableEdgeEnv = () => ({
   parsed: {

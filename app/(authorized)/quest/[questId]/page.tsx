@@ -1,12 +1,12 @@
 "use server";
 
+import { Steps } from "../../../../components/quests/Steps";
+import { LocalSteps } from "../../../../components/quests/LocalSteps";
+import { getQuest } from "../../../../lib/getQuest";
+import { getUser } from "../../../../lib/getUser";
+import { saveSteps } from "../../../../actions/saveSteps";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { Steps } from "@/components/quests/Steps";
-import { LocalSteps } from "@/components/quests/LocalSteps";
-import { getQuest } from "@/lib/getQuest";
-import { getUser } from "@/lib/getUser";
-import { saveSteps } from "@/actions/saveSteps";
 
 const StepsPage = async ({
   params,
