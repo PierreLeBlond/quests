@@ -167,8 +167,8 @@ export function Quests({ props }: { props: QuestsProps }) {
                         key={step.id}
                         className={`h-2 w-2 rounded-full ${
                           step.done
-                            ? "bg-stone-500"
-                            : "bg-stone-900 dark:bg-stone-100"
+                            ? "bg-stone-900 dark:bg-stone-100"
+                            : "bg-stone-500"
                         }`}
                       />
                     ))}
