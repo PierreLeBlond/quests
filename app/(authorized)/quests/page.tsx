@@ -1,19 +1,19 @@
 "use server";
 
 import { Quests } from "@/components/quests/Quests";
-import { getQuests } from "@/lib/getQuests";
 import { getUser } from "@/lib/getUser";
 import { LocalQuests } from "@/components/quests/LocalQuests";
 import { saveQuests } from "@/actions/saveQuests";
+import { getUserQuests } from "@/lib/user/getUserQuests";
 
 const QuestsPage = async () => {
   const user = await getUser();
-  const quests = await getQuests();
+  const quests = user ? await getUserQuests(user) : null;
 
   return (
     <>
-      <h1 className="fixed left-0 top-0 p-2 text-3xl font-bold">Quests</h1>
-      <h2 className="fixed left-0 top-8 p-2 text-xs text-stone-500">
+      <h1 className="fixed top-0 left-0 p-2 text-3xl font-bold">Quests</h1>
+      <h2 className="fixed top-8 left-0 p-2 text-xs text-stone-500">
         {user ? user.username : "Local"}
       </h2>
       <main className="relative flex w-full flex-col items-center pt-10">

@@ -50,19 +50,18 @@ export const saveSteps = safeAction
         !questInput.steps.find((stepInput) => stepInput.id === step.id),
     );
 
-    await prisma.quest.update({
-      where: {
-        id: questInput.id,
-      },
-      data: {
-        steps: {
-          deleteMany: deleteStepsInputs.map(({ id }) => ({ id })),
+    await Promise.all([
+      prisma.quest.update({
+        where: {
+          id: questInput.id,
         },
-      },
-    });
-
-    await Promise.all(
-      updateStepsInputs.map((stepInput) =>
+        data: {
+          steps: {
+            deleteMany: deleteStepsInputs.map(({ id }) => ({ id })),
+          },
+        },
+      }),
+      ...updateStepsInputs.map((stepInput) =>
         prisma.step.update({
           where: {
             id: stepInput.id,
@@ -74,10 +73,7 @@ export const saveSteps = safeAction
           },
         }),
       ),
-    );
-
-    await Promise.all(
-      createStepsInputs.map(async (stepInput) =>
+      ...createStepsInputs.map(async (stepInput) =>
         prisma.step.create({
           data: {
             ...stepInput,
@@ -85,7 +81,7 @@ export const saveSteps = safeAction
           },
         }),
       ),
-    );
+    ]);
 
     revalidatePath("/");
 

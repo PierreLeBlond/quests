@@ -5,8 +5,6 @@ import { safeAction } from "@/lib/safeAction";
 import { questsInputsSchema } from "@/lib/schema/questsInputsSchema";
 import { getUserQuests } from "@/lib/user/getUserQuests";
 import prisma from "@/prisma/prisma";
-import { QuestInput } from "@/types/Quest";
-import { InferSafeActionFnResult } from "next-safe-action";
 import { revalidatePath } from "next/cache";
 
 export const saveQuests = safeAction
@@ -43,19 +41,18 @@ export const saveQuests = safeAction
       (quest) => !questsInputs.find((questInput) => questInput.id === quest.id),
     );
 
-    await prisma.user.update({
-      where: {
-        id: user.id,
-      },
-      data: {
-        quests: {
-          deleteMany: deleteQuestsInputs.map(({ id }) => ({ id })),
+    await Promise.all([
+      prisma.user.update({
+        where: {
+          id: user.id,
         },
-      },
-    });
-
-    await Promise.all(
-      updateQuestsInputs.map((updateQuestInput) =>
+        data: {
+          quests: {
+            deleteMany: deleteQuestsInputs.map(({ id }) => ({ id })),
+          },
+        },
+      }),
+      ...updateQuestsInputs.map((updateQuestInput) =>
         prisma.quest.update({
           where: {
             id: updateQuestInput.id,
@@ -66,10 +63,7 @@ export const saveQuests = safeAction
           },
         }),
       ),
-    );
-
-    await Promise.all(
-      createQuestsInputs.map(async (questInput) =>
+      ...createQuestsInputs.map(async (questInput) =>
         prisma.quest.create({
           data: {
             name: questInput.name,
@@ -78,7 +72,7 @@ export const saveQuests = safeAction
           },
         }),
       ),
-    );
+    ]);
 
     revalidatePath("/");
 

@@ -4,12 +4,13 @@ import { githubAuth } from "@/lucia/lucia";
 
 export const GET = async () => {
   const state = generateState();
-  const url = await githubAuth.createAuthorizationURL(state, []);
+  const url = githubAuth.createAuthorizationURL(state, []);
   // store state
   const cookies = await context.cookies();
   cookies.set("github_oauth_state", state, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
+    sameSite: "lax" as const,
     path: "/",
     maxAge: 60 * 60,
   });
