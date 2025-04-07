@@ -34,7 +34,7 @@ const clientSecret = process.env.GITHUB_CLIENT_SECRET || "";
 export const githubAuth = new GitHub(
   clientId,
   clientSecret,
-  `${process.env.PUBLIC_BASE_URL}/login/github/verification`,
+  `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_PATH}/login/github/verification`,
 );
 
 export type Auth = typeof auth;

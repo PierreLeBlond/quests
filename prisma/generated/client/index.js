@@ -156,6 +156,10 @@ const config = {
         "fromEnvVar": null,
         "value": "debian-openssl-3.0.x",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "debian-openssl-1.1.x"
       }
     ],
     "previewFeatures": [],
@@ -173,7 +177,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": true,
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -182,8 +186,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated/client\"\n}\n\ndatasource db {\n  provider = \"postgres\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id String @id @unique\n\n  auth_session Session[]\n  quests       Quest[]\n\n  github_username String @unique\n}\n\nmodel Session {\n  id        String   @id @unique\n  userId    String\n  expiresAt DateTime\n  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)\n}\n\nmodel Quest {\n  id       String  @id @default(uuid())\n  name     String\n  archived Boolean @default(false)\n\n  user_id String\n  user    User   @relation(references: [id], fields: [user_id], onDelete: Cascade)\n\n  index Int\n\n  steps Step[]\n}\n\nmodel Step {\n  id          String  @id @default(uuid())\n  description String\n  done        Boolean @default(false)\n\n  index Int\n\n  quest_id String\n  quest    Quest  @relation(references: [id], fields: [quest_id], onDelete: Cascade)\n}\n",
-  "inlineSchemaHash": "14a5afe4cd86d0f3c1366dab5650885ba76353e549f9ebe76a1d78bceac34ef6",
+  "inlineSchema": "generator client {\n  provider      = \"prisma-client-js\"\n  output        = \"./generated/client\"\n  binaryTargets = [\"native\", \"debian-openssl-1.1.x\"]\n}\n\ndatasource db {\n  provider = \"postgres\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id String @id @unique\n\n  auth_session Session[]\n  quests       Quest[]\n\n  github_username String @unique\n}\n\nmodel Session {\n  id        String   @id @unique\n  userId    String\n  expiresAt DateTime\n  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)\n}\n\nmodel Quest {\n  id       String  @id @default(uuid())\n  name     String\n  archived Boolean @default(false)\n\n  user_id String\n  user    User   @relation(references: [id], fields: [user_id], onDelete: Cascade)\n\n  index Int\n\n  steps Step[]\n}\n\nmodel Step {\n  id          String  @id @default(uuid())\n  description String\n  done        Boolean @default(false)\n\n  index Int\n\n  quest_id String\n  quest    Quest  @relation(references: [id], fields: [quest_id], onDelete: Cascade)\n}\n",
+  "inlineSchemaHash": "a01602caddc92b0971c92597a82db510cadc26723837803866d401625d40d9e0",
   "copyEngine": true
 }
 
@@ -224,6 +228,10 @@ Object.assign(exports, Prisma)
 // file annotations for bundling tools to include these files
 path.join(__dirname, "libquery_engine-debian-openssl-3.0.x.so.node");
 path.join(process.cwd(), "prisma/generated/client/libquery_engine-debian-openssl-3.0.x.so.node")
+
+// file annotations for bundling tools to include these files
+path.join(__dirname, "libquery_engine-debian-openssl-1.1.x.so.node");
+path.join(process.cwd(), "prisma/generated/client/libquery_engine-debian-openssl-1.1.x.so.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "prisma/generated/client/schema.prisma")

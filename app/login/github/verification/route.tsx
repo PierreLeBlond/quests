@@ -17,6 +17,7 @@ export const GET = async (request: Request) => {
   const storedState = cookies.get("github_oauth_state")?.value;
 
   if (!storedState || !state || storedState !== state || !code) {
+    console.log(`Github OAuth url invalide: ${storedState}, ${state}, ${code}`);
     throw new Error("Github OAuth url invalide");
   }
 
@@ -46,7 +47,7 @@ export const GET = async (request: Request) => {
       return new Response(null, {
         status: 302,
         headers: {
-          Location: "/",
+          Location: `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_PATH}`,
         },
       });
     }
@@ -71,7 +72,7 @@ export const GET = async (request: Request) => {
     return new Response(null, {
       status: 302,
       headers: {
-        Location: "/",
+        Location: `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_PATH}`,
       },
     });
   } catch (e) {

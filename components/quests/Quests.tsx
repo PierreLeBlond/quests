@@ -161,7 +161,7 @@ export function Quests({ props }: { props: QuestsProps }) {
 
               const item = (
                 <>
-                  <div className="absolute bottom-0 flex h-2 w-full gap-2 pl-10 pr-10">
+                  <div className="absolute bottom-0 flex h-2 w-full gap-2 pr-10 pl-10">
                     {steps.map((step) => (
                       <div
                         key={step.id}
@@ -186,7 +186,7 @@ export function Quests({ props }: { props: QuestsProps }) {
                 >
                   {editMode === "open" && (
                     <Link
-                      href={`quest/${questId}`}
+                      href={`/quest/${questId}`}
                       className={`${
                         !questId && "pointer-events-none text-stone-500"
                       } flex w-full items-center`}

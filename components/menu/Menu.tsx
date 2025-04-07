@@ -12,6 +12,7 @@ import {
 import { getUser } from "@/lib/getUser";
 import { auth } from "@/lucia/lucia";
 import { ThemeSwitch } from "./ThemeSwitch";
+import Link from "next/link";
 
 const Menu = async () => {
   const logout = async () => {
@@ -60,17 +61,17 @@ const Menu = async () => {
   const loginItem = !user && (
     <>
       <DropdownMenuItem>
-        <a className="flex w-full items-center justify-center" href="/login">
+        <Link className="flex w-full items-center justify-center" href="/login">
           Log in
           <Key className="ml-2 h-4 w-4" />
-        </a>
+        </Link>
       </DropdownMenuItem>
       <DropdownMenuSeparator />
     </>
   );
 
   return (
-    <nav className="fixed right-2 top-0 z-10 flex p-4">
+    <nav className="fixed top-0 right-2 z-10 flex p-4">
       <DropdownMenu>
         <DropdownMenuTrigger>
           <MoreVertical className="h-6 w-6" />

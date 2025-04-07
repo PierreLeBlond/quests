@@ -1,6 +1,8 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "./generated/client"
+  provider      = "prisma-client-js"
+  output        = "./generated/client"
+  // Deploy server needs openssl 1.1.x rather than 3.x
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
 }
 
 datasource db {

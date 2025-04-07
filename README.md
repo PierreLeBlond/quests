@@ -23,15 +23,29 @@ See https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-o
 `GITHUB_CLIENT_ID="<github client id>"`
 `GITHUB_CLIENT_SECRET="<github client password>"`
 
-### Act
-
-To test github actions locally, you can use [act](https://github.com/nektos/act).
-
 ## Deployment
 
 You'll need to provide several environment variables :
 
 - DATABASE_URL : `psql` database url
-- FLY_API_TOKEN : fly.io token
 - GITHUB_CLIENT_ID
 - GITHUB_CLIENT_SECRET
+- NEXT_PUBLIC_BASE_PATH
+
+And some github secrets :
+
+- FTP_SERVER
+- FTP_USERNAME
+- FTP_PASSWORD
+
+Then run :
+
+`npx prisma generate`
+
+Though we'd better generate prisma files within github deploy action.
+
+commit & push to remote.
+
+If necessary, update db schema on remote server :
+
+`npx prisma migrate deploy`
