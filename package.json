@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "standalone": "next build && cp -r public .next/standalone/ && cp -r .next/static .next/standalone/.next/ && rm .next/standalone/.env",
+    "standalone": "next build && cp -r public .next/standalone/ && cp -r .next/static .next/standalone/.next/",
     "start": "next start",
     "lint": "next lint",
     "check": "tsc --noEmit",

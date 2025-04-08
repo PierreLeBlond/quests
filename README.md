@@ -4,7 +4,7 @@ A minimalist todo app as a list of quest, composed by steps.
 
 ## development
 
-### Prisma
+### prisma
 
 Add into `.env.local` your development `DATABASE_URL` environment variable pointing to a `psql` database.
 
@@ -15,7 +15,7 @@ run :
 `npx prisma generate`
 `npx prisma db push`
 
-### Github OAuth
+### github oauth
 
 Add into `.env.local` your development `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`.
 See https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app
@@ -23,7 +23,7 @@ See https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-o
 `GITHUB_CLIENT_ID="<github client id>"`
 `GITHUB_CLIENT_SECRET="<github client password>"`
 
-## Deployment
+## deployment
 
 You'll need to provide several environment variables :
 
@@ -49,3 +49,14 @@ commit & push to remote.
 If necessary, update db schema on remote server :
 
 `npx prisma migrate deploy`
+
+### test deploymemt
+
+You can test deployment with [act](https://github.com/SamKirkland/FTP-Deploy-Action/tree/v4.3.5/)
+
+```
+act push push --secret-file .env
+```
+
+Prior that you provided ftp github secrets in your .env too !
+No files should be copied as it should run in dry mode.
