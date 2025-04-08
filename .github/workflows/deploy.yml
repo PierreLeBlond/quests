@@ -21,7 +21,7 @@ jobs:
       - name: Sync files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          local-dir: .next/standalone
+          local-dir: .next/standalone/
           server-dir: ./app/quests/
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
